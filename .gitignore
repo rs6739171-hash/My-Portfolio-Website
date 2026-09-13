@@ -1,0 +1,16 @@
+# Large Archives (exceeds GitHub 100MB single-file limit)
+video_frames_30fps_png.zip
+
+# System & OS Files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local IDE & agent artifacts
+.idea/
+.vscode/

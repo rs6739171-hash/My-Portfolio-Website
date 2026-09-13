@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rishabh Shukla — AI & GenAI Engineer | IIT Madras</title>
+  <meta name="description" content="Portfolio of Rishabh Shukla, AI & GenAI Engineer at IIT Madras (BS in Data Science & AI). Specialized in LangGraph, Model Context Protocol (MCP), Agentic RAG, and multi-agent systems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Preloader overlay -->
+  <div id="preloader" class="preloader">
+    <div class="preloader-content">
+      <div class="brand-badge">RISHABH SHUKLA · AI PORTFOLIO</div>
+      <div class="progress-bar-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <div class="preloader-status">
+        <span id="progressText">Initializing experience</span>
+        <span id="progressPercent">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Canvas Viewport -->
+  <div class="canvas-viewport" aria-hidden="true">
+    <canvas id="frameCanvas"></canvas>
+    <!-- Lighting and contrast overlays so text and video blend seamlessly -->
+    <div class="ambient-glow"></div>
+    <div class="canvas-scrim"></div>
+    <div class="vignette-overlay"></div>
+  </div>
+
+  <!-- Minimalist Frame & Scroll Tracker Pill -->
+  <div id="framePill" class="frame-pill">
+    <span class="pill-dot"></span>
+    <span id="pillText">FRAME 001 / 240</span>
+  </div>
+
+  <!-- Floating Sticky Navigation Bar -->
+  <header class="navbar-wrapper">
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="#" class="nav-brand">Rishabh<span>.</span></a>
+
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="https://github.com/rs6739171-hash" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile">
+          <svg class="nav-svg-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="Rishabh Shukla Resume.pdf" download="Rishabh_Shukla_Resume.pdf" class="btn-contact">Download CV</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content Layer -->
+  <main class="content-container">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="hero-content">
+
+        <!-- Short Introduction Stanza on Top of the Webpage -->
+        <div class="intro-stanza-container">
+          <div class="intro-status-chip">
+            <span class="pulse-star">✦</span>
+            <span class="chip-name">Hi, I'm Rishabh Shukla</span>
+            <span class="chip-divider">·</span>
+            <span class="chip-sub">IIT Madras '26</span>
+          </div>
+          <blockquote class="intro-stanza">
+            "Bridging mathematical rigor with autonomous reasoning &mdash;<br>
+            I architect multi-agent swarms and guardrailed GenAI pipelines that turn raw data into intelligent, decisive action."
+          </blockquote>
+        </div>
+
+        <!-- Figma / Design Selection Box -->
+        <div class="design-bounding-box">
+          <!-- 8 Resize Anchor Points -->
+          <span class="handle handle-tl"></span>
+          <span class="handle handle-tc"></span>
+          <span class="handle handle-tr"></span>
+          <span class="handle handle-ml"></span>
+          <span class="handle handle-mr"></span>
+          <span class="handle handle-bl"></span>
+          <span class="handle handle-bc"></span>
+          <span class="handle handle-br"></span>
+
+          <!-- Floating Badges with Pointers -->
+          <div class="floating-badge badge-agency">
+            <span class="badge-text">IIT Madras (8.5 CGPA)</span>
+            <svg class="pointer-arrow pointer-arrow-left" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2 14L14 2M14 2H6M14 2V10"/>
+            </svg>
+          </div>
+
+          <div class="floating-badge badge-expert">
+            <svg class="pointer-arrow pointer-arrow-right" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M14 14L2 2M2 2H10M2 2V10"/>
+            </svg>
+            <span class="badge-text">GenAI & Agentic RAG</span>
+          </div>
+
+          <div class="floating-badge badge-innovative">
+            <svg class="pointer-arrow pointer-arrow-bottom" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M14 14L2 2M2 2H10M2 2V10"/>
+            </svg>
+            <span class="badge-text">LangGraph & MCP</span>
+          </div>
+
+          <!-- Main Typography inside selection box -->
+          <div class="hero-text-wrapper">
+            <h1 class="hero-title">
+              <span class="title-line-1">Engineering</span>
+              <span class="title-line-2">Agentic <em class="serif-accent">intelligence</em></span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Aspiring AI/GenAI Engineer at IIT Madras (BS in Data Science & AI, CGPA 8.5). Specializing in multi-agent orchestration with LangGraph, Model Context Protocol (MCP), Enterprise RAG, and production GenAI pipelines.
+            </p>
+          </div>
+        </div>
+
+        <!-- Hero Actions -->
+        <div class="hero-cta-wrapper">
+          <a href="#projects" class="btn-pill-cta">
+            <span class="btn-circle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m13 17 5-5-5-5M6 17l5-5-5-5"/>
+              </svg>
+            </span>
+            <span class="btn-label">Explore Projects</span>
+          </a>
+          <a href="https://github.com/rs6739171-hash" target="_blank" rel="noopener noreferrer" class="btn-pill-cta btn-pill-secondary">
+            <span class="btn-circle-icon github-circle">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </span>
+            <span class="btn-label">GitHub Repositories</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <div class="about-content">
+        <span class="section-kicker">About Rishabh Shukla</span>
+        
+        <p class="about-statement">
+          I am an aspiring AI/GenAI Engineer from <strong class="highlight-text">IIT Madras</strong> with hands-on experience architecting autonomous multi-agent systems, cyclic state graphs in <strong class="highlight-text">LangGraph</strong>, safety guardrails in <strong class="highlight-text">NeMo</strong>, and high-performance retrieval pipelines with <strong class="highlight-text">Qdrant & Model Context Protocol (MCP)</strong>. My goal is to build reliable, production-grade GenAI products that combine autonomous decision-making with human-in-the-loop safety.
+        </p>
+
+        <!-- Academic & Experience Credential Pills -->
+        <div class="credentials-pills-row">
+          <div class="cred-pill">
+            <span class="cred-icon">🎓</span>
+            <div class="cred-info">
+              <span class="cred-label">IIT Madras</span>
+              <span class="cred-val">BS in Data Science & AI (8.5 CGPA)</span>
+            </div>
+          </div>
+
+          <div class="cred-pill">
+            <span class="cred-icon">💼</span>
+            <div class="cred-info">
+              <span class="cred-label">Industry Experience</span>
+              <span class="cred-val">Technocruitx Pvt Ltd (1 Yr Analyst)</span>
+            </div>
+          </div>
+
+          <div class="cred-pill">
+            <span class="cred-icon">⚡</span>
+            <div class="cred-info">
+              <span class="cred-label">Core Focus</span>
+              <span class="cred-val">LangGraph, MCP & Agentic RAG</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-cta-wrapper">
+          <a href="#skills" class="btn-pill-cta">
+            <span class="btn-circle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m13 17 5-5-5-5M6 17l5-5-5-5"/>
+              </svg>
+            </span>
+            <span class="btn-label">View Technical Arsenal</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Skills Section (Replacing generic services) -->
+    <section id="skills" class="services-section">
+      <div class="services-container">
+
+        <!-- Skills Header -->
+        <div class="services-header">
+          <h2 class="services-title">
+            Technical arsenal<br>
+            <em class="serif-accent">& core competencies</em>
+          </h2>
+
+          <a href="#projects" class="btn-pill-cta">
+            <span class="btn-circle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m13 17 5-5-5-5M6 17l5-5-5-5"/>
+              </svg>
+            </span>
+            <span class="btn-label">Inspect Projects</span>
+          </a>
+        </div>
+
+        <!-- 4 Skills Cards Grid -->
+        <div class="services-grid">
+
+          <!-- Card 1 -->
+          <article class="service-card" data-service="agentic-frameworks">
+            <div class="card-inner">
+              <span class="card-number">01</span>
+              <h3 class="card-title">LLM & Agentic Frameworks</h3>
+              
+              <div class="card-tags">
+                <span class="tag-pill">LangGraph</span>
+                <span class="tag-pill">Model Context Protocol (MCP)</span>
+                <span class="tag-pill">LangChain</span>
+                <span class="tag-pill">Multi-Agent Orchestration</span>
+                <span class="tag-pill">Supervisor Routing</span>
+              </div>
+
+              <div class="card-action">
+                <button class="btn-circle-action" aria-label="Explore Agentic Frameworks">
+                  <span class="action-icon">+</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="service-card" data-service="rag-vectors">
+            <div class="card-inner">
+              <span class="card-number">02</span>
+              <h3 class="card-title">Agentic RAG & Vector DB</h3>
+              
+              <div class="card-tags">
+                <span class="tag-pill">Retrieval-Augmented Gen</span>
+                <span class="tag-pill">Qdrant Vector DB</span>
+                <span class="tag-pill">Gemini Embeddings</span>
+                <span class="tag-pill">Semantic Re-Ranking</span>
+                <span class="tag-pill">Portkey LLM Gateway</span>
+              </div>
+
+              <div class="card-action">
+                <button class="btn-circle-action" aria-label="Explore RAG & Vectors">
+                  <span class="action-icon">+</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="service-card" data-service="safety-evals">
+            <div class="card-inner">
+              <span class="card-number">03</span>
+              <h3 class="card-title">Safety, Guardrails & Evals</h3>
+              
+              <div class="card-tags">
+                <span class="tag-pill">NeMo Guardrails</span>
+                <span class="tag-pill">RAGAS Evaluation</span>
+                <span class="tag-pill">Deepevals</span>
+                <span class="tag-pill">Human-in-the-Loop (HITL)</span>
+                <span class="tag-pill">Input / Jailbreak Defense</span>
+              </div>
+
+              <div class="card-action">
+                <button class="btn-circle-action" aria-label="Explore Safety & Evals">
+                  <span class="action-icon">+</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="service-card" data-service="backend-infra">
+            <div class="card-inner">
+              <span class="card-number">04</span>
+              <h3 class="card-title">Backend & Deployment</h3>
+              
+              <div class="card-tags">
+                <span class="tag-pill">Python</span>
+                <span class="tag-pill">FastAPI</span>
+                <span class="tag-pill">PostgreSQL</span>
+                <span class="tag-pill">Streamlit Demos</span>
+                <span class="tag-pill">REST APIs & Tool Calling</span>
+              </div>
+
+              <div class="card-action">
+                <button class="btn-circle-action" aria-label="Explore Backend & Infrastructure">
+                  <span class="action-icon">+</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section with Interactive Prototype Previews -->
+    <section id="projects" class="projects-section">
+      <div class="projects-container">
+
+        <div class="section-intro">
+          <span class="section-kicker">GitHub Flagship Repositories</span>
+          <h2 class="section-heading">
+            Production projects &<br>
+            <em class="serif-accent">interactive prototype previews</em>
+          </h2>
+          <p class="section-subtext">
+            Architected and implemented on GitHub by Rishabh Shukla. Click and interact with the live prototype simulators below to inspect the real agentic workflows, guardrails, and graph states.
+          </p>
+        </div>
+
+        <!-- Project 1: Enterprise Agentic RAG System -->
+        <div class="project-showcase-card" id="project-rag">
+          <div class="project-details">
+            <div class="project-badge-row">
+              <span class="project-type-badge">ENTERPRISE GENAI</span>
+              <span class="repo-badge">github.com/rs6739171-hash</span>
+            </div>
+            
+            <h3 class="project-title">Enterprise Agentic RAG System</h3>
+            
+            <p class="project-description">
+              A production-grade, enterprise-level RAG pipeline built with <strong>LangGraph</strong>, <strong>Portkey LLM Gateway</strong>, and <strong>Gemini Embeddings</strong>. Employs <strong>NeMo Guardrails</strong> to filter out jailbreak attempts and prompt injections before vector retrieval, then uses semantic re-ranking and cyclic history-aware planning to ensure grounded, verified outputs.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag-pill">LangGraph</span>
+              <span class="tag-pill">Portkey Gateway</span>
+              <span class="tag-pill">Qdrant Vector DB</span>
+              <span class="tag-pill">Gemini Embeddings</span>
+              <span class="tag-pill">NeMo Guardrails</span>
+              <span class="tag-pill">RAGAS Evaluation</span>
+            </div>
+
+            <div class="project-actions">
+              <a href="https://github.com/rs6739171-hash/Interprise_Grade_Rag_Application" target="_blank" rel="noopener noreferrer" class="btn-pill-cta">
+                <span class="btn-circle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>
+                  </svg>
+                </span>
+                <span class="btn-label">View on GitHub</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive Prototype Frame 1 -->
+          <div class="prototype-frame">
+            <div class="frame-header">
+              <div class="frame-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="frame-title">Enterprise_RAG_Pipeline.py · Live Simulator</span>
+              <span class="frame-status">ACTIVE</span>
+            </div>
+
+            <div class="prototype-content">
+              <!-- Controls -->
+              <div class="prototype-controls">
+                <label class="control-label">Select Simulated Query:</label>
+                <div class="query-select-row">
+                  <button class="query-btn active" data-type="valid">Q1: Technical Architecture</button>
+                  <button class="query-btn" data-type="injection">Q2: Jailbreak Injection Attempt</button>
+                </div>
+                <button class="btn-run-simulation" id="runRagSim">
+                  <span class="run-icon">▶</span>
+                  <span>Execute RAG Pipeline</span>
+                </button>
+              </div>
+
+              <!-- Terminal Output Screen -->
+              <div class="terminal-screen" id="ragTerminal">
+                <div class="terminal-line text-muted">[system] Initializing Portkey Gateway + Qdrant Vector DB...</div>
+                <div class="terminal-line text-green">[ready] NeMo Guardrails safety gate active. Cyclic LangGraph initialized.</div>
+                <div class="terminal-line terminal-prompt">
+                  <span class="prompt-arrow">&gt;</span> Query: "Explain the multi-step history-aware planning in LangGraph RAG"
+                </div>
+                <div class="terminal-line text-orange">[guardrail] NeMo Input Validation: PASS (Safety Score: 0.99)</div>
+                <div class="terminal-line text-blue">[retrieval] Qdrant search returned 4 candidate chunks (Cosine &gt; 0.84)</div>
+                <div class="terminal-line text-purple">[reranker] Semantic re-ranker distilled 2 authoritative chunks</div>
+                <div class="terminal-line text-white">[response] "LangGraph maintains conversation state across cycles, generating a rewrite plan before vector retrieval to eliminate noise and synthesize verifiable answers."</div>
+                <div class="terminal-line text-green">[eval] RAGAS Faithfulness: 0.96 | Answer Relevance: 0.94</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Autonomous Multi-Agent Market Analyst -->
+        <div class="project-showcase-card" id="project-market">
+          <div class="project-details">
+            <div class="project-badge-row">
+              <span class="project-type-badge">AUTONOMOUS AGENTS</span>
+              <span class="repo-badge">github.com/rs6739171-hash</span>
+            </div>
+            
+            <h3 class="project-title">Autonomous Multi-Agent Market Analyst</h3>
+            
+            <p class="project-description">
+              An enterprise-grade, multi-agent AI platform designed to autonomously aggregate market data, perform fundamental and technical analysis, and synthesize institutional-grade investment memos. Features a <strong>Human-in-the-Loop (HITL)</strong> review node, stateful graph orchestration, and decoupled FastAPI/Streamlit layers.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag-pill">LangGraph</span>
+              <span class="tag-pill">FastAPI</span>
+              <span class="tag-pill">Streamlit</span>
+              <span class="tag-pill">yfinance API</span>
+              <span class="tag-pill">Human-in-the-Loop</span>
+              <span class="tag-pill">Equity Research</span>
+            </div>
+
+            <div class="project-actions">
+              <a href="https://github.com/rs6739171-hash/Market_Analyst_Agent" target="_blank" rel="noopener noreferrer" class="btn-pill-cta">
+                <span class="btn-circle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>
+                  </svg>
+                </span>
+                <span class="btn-label">View on GitHub</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive Prototype Frame 2 -->
+          <div class="prototype-frame">
+            <div class="frame-header">
+              <div class="frame-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="frame-title">Market_Analyst_Graph.py · Multi-Agent Orchestrator</span>
+              <span class="frame-status">HITL ENABLED</span>
+            </div>
+
+            <div class="prototype-content">
+              <!-- Controls -->
+              <div class="prototype-controls">
+                <label class="control-label">Select Ticker to Analyze:</label>
+                <div class="query-select-row">
+                  <button class="ticker-btn active" data-ticker="NVDA">NVDA (NVIDIA)</button>
+                  <button class="ticker-btn" data-ticker="AAPL">AAPL (Apple)</button>
+                  <button class="ticker-btn" data-ticker="MSFT">MSFT (Microsoft)</button>
+                </div>
+                <button class="btn-run-simulation" id="runMarketSim">
+                  <span class="run-icon">▶</span>
+                  <span>Trigger Agent Swarm</span>
+                </button>
+              </div>
+
+              <!-- Multi-Agent Node Visualizer & Terminal -->
+              <div class="terminal-screen" id="marketTerminal">
+                <div class="terminal-line text-blue">[1/4 Data Aggregator] Calling yfinance API for live fundamentals & pricing...</div>
+                <div class="terminal-line text-purple">[2/4 Technical Analyst] Computing RSI, MACD, and 200-day SMA trends...</div>
+                <div class="terminal-line text-orange">[3/4 Risk Analyst] Assessing volatility, beta, and macro risk exposure...</div>
+                <div class="terminal-line text-yellow">[4/4 HITL Node] Awaiting Human Analyst review of generated thesis...</div>
+                <div class="terminal-line text-green">[Approved] Institutional Memo Synthesized: Strong Buy Thesis (Target Upside: +18%)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Real-World Multi-Agent Travel Planner -->
+        <div class="project-showcase-card" id="project-travel">
+          <div class="project-details">
+            <div class="project-badge-row">
+              <span class="project-type-badge">MODEL CONTEXT PROTOCOL</span>
+              <span class="repo-badge">github.com/rs6739171-hash</span>
+            </div>
+            
+            <h3 class="project-title">Real-World Multi-Agent Travel Planner</h3>
+            
+            <p class="project-description">
+              A production-style multi-agent travel planning system built with <strong>LangGraph</strong> and <strong>Model Context Protocol (MCP)</strong>. A supervisor agent dynamically routes tasks to specialist sub-agents (Flights, Hotels, Weather, Budget Constraints) with live external API calls and persistent state storage in <strong>PostgreSQL</strong>.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag-pill">LangGraph</span>
+              <span class="tag-pill">MCP Protocol</span>
+              <span class="tag-pill">PostgreSQL</span>
+              <span class="tag-pill">Streamlit</span>
+              <span class="tag-pill">Live APIs</span>
+              <span class="tag-pill">Supervisor Routing</span>
+            </div>
+
+            <div class="project-actions">
+              <a href="https://github.com/rs6739171-hash/Travel_Planner_System" target="_blank" rel="noopener noreferrer" class="btn-pill-cta">
+                <span class="btn-circle-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>
+                  </svg>
+                </span>
+                <span class="btn-label">View on GitHub</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive Prototype Frame 3 -->
+          <div class="prototype-frame">
+            <div class="frame-header">
+              <div class="frame-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="frame-title">MCP_Travel_Supervisor.py · Dynamic Routing</span>
+              <span class="frame-status">MCP CONNECTED</span>
+            </div>
+
+            <div class="prototype-content">
+              <!-- Controls -->
+              <div class="prototype-controls">
+                <label class="control-label">Select Trip Request:</label>
+                <div class="query-select-row">
+                  <button class="travel-btn active" data-dest="Tokyo">Tokyo (7 Days · $2,500)</button>
+                  <button class="travel-btn" data-dest="Paris">Paris (5 Days · $1,800)</button>
+                </div>
+                <button class="btn-run-simulation" id="runTravelSim">
+                  <span class="run-icon">▶</span>
+                  <span>Dispatch Supervisor</span>
+                </button>
+              </div>
+
+              <!-- Terminal -->
+              <div class="terminal-screen" id="travelTerminal">
+                <div class="terminal-line text-blue">[Supervisor] Parsing request: Tokyo, 7 Days, Budget: $2,500</div>
+                <div class="terminal-line text-purple">[MCP Flight Tool] Found 3 direct flights under $850 limit</div>
+                <div class="terminal-line text-orange">[MCP Hotel Tool] Selected 4-star Shibuya hotel ($145/night)</div>
+                <div class="terminal-line text-yellow">[Budget Constraint Solver] Remaining budget: $635 for activities</div>
+                <div class="terminal-line text-green">[Output] Ready-to-book day-by-day itinerary committed to PostgreSQL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Experience & Education Timeline Section -->
+    <section id="experience" class="experience-section">
+      <div class="experience-container">
+        
+        <div class="section-intro">
+          <span class="section-kicker">Career & Academia</span>
+          <h2 class="section-heading">
+            Education & professional<br>
+            <em class="serif-accent">experience</em>
+          </h2>
+        </div>
+
+        <div class="timeline-grid">
+          
+          <!-- Education Card -->
+          <div class="timeline-card">
+            <div class="timeline-badge">2022 — 2026</div>
+            <h3 class="timeline-role">BS in Data Science & Artificial Intelligence</h3>
+            <h4 class="timeline-org">Indian Institute of Technology Madras (IIT Madras)</h4>
+            <div class="timeline-meta">
+              <span class="meta-tag">CGPA: 8.5 / 10.0</span>
+              <span class="meta-tag">Undergraduate Degree</span>
+            </div>
+            <p class="timeline-desc">
+              Comprehensive coursework and practical research in Deep Learning, Generative AI, Multi-Agent Systems, Mathematical Foundations of Machine Learning, and Large Language Models.
+            </p>
+          </div>
+
+          <!-- Professional Experience Card -->
+          <div class="timeline-card">
+            <div class="timeline-badge">1 YEAR EXPERIENCE</div>
+            <h3 class="timeline-role">Medical & Dental Billing Report and Revenue Analyst</h3>
+            <h4 class="timeline-org">Technocruitx Pvt Ltd</h4>
+            <div class="timeline-meta">
+              <span class="meta-tag">Data & Revenue Analysis</span>
+              <span class="meta-tag">Python & Reporting</span>
+            </div>
+            <p class="timeline-desc">
+              Analyzed large-scale healthcare billing datasets, identified revenue cycle bottlenecks, automated complex analytical reporting pipelines, and optimized claim resolution efficiency.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="contact" class="site-footer">
+      <div class="footer-container">
+
+        <!-- Footer Top CTA Banner -->
+        <div class="footer-cta-banner">
+          <div class="footer-cta-text">
+            <span class="cta-kicker">Get In Touch</span>
+            <h2 class="footer-cta-title">
+              Let's build production-grade<br>
+              <em class="serif-accent">GenAI systems together.</em>
+            </h2>
+          </div>
+          <div class="footer-cta-action">
+            <a href="mailto:rishabhshukla9512@gmail.com" class="btn-pill-cta btn-pill-cta-lg">
+              <span class="btn-circle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m13 17 5-5-5-5M6 17l5-5-5-5"/>
+                </svg>
+              </span>
+              <span class="btn-label">rishabhshukla9512@gmail.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer Navigation Columns -->
+        <div class="footer-nav-grid">
+          <!-- Col 1: Brand & Bio -->
+          <div class="footer-col footer-col-brand">
+            <a href="#" class="footer-brand">Rishabh Shukla<span>.</span></a>
+            <p class="footer-bio">
+              Aspiring AI/GenAI Engineer from IIT Madras specializing in LangGraph multi-agent orchestration, agentic RAG architectures, and production-ready LLM systems.
+            </p>
+            <div class="footer-social-links">
+              <a href="https://github.com/rs6739171-hash" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </a>
+              <a href="mailto:rishabhshukla9512@gmail.com" class="social-icon" aria-label="Email">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </a>
+              <a href="Rishabh Shukla Resume.pdf" download="Rishabh_Shukla_Resume.pdf" class="social-icon" aria-label="Resume PDF">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Col 2: Navigation -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Navigation</h4>
+            <ul class="footer-list">
+              <li><a href="#hero">Home</a></li>
+              <li><a href="#about">About Rishabh</a></li>
+              <li><a href="#skills">Technical Skills</a></li>
+              <li><a href="#projects">GitHub Projects</a></li>
+              <li><a href="#experience">Education & Experience</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Repositories -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Flagship Repos</h4>
+            <ul class="footer-list">
+              <li><a href="https://github.com/rs6739171-hash/Interprise_Grade_Rag_Application" target="_blank" rel="noopener noreferrer">Enterprise Agentic RAG</a></li>
+              <li><a href="https://github.com/rs6739171-hash/Market_Analyst_Agent" target="_blank" rel="noopener noreferrer">Market Analyst Agent</a></li>
+              <li><a href="https://github.com/rs6739171-hash/Travel_Planner_System" target="_blank" rel="noopener noreferrer">Travel Planner System</a></li>
+              <li><a href="https://github.com/rs6739171-hash/Multi_Agent_system" target="_blank" rel="noopener noreferrer">Multi-Agent Systems</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 4: Contact & Phone -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">Contact Information</h4>
+            <ul class="footer-contact-list">
+              <li>
+                <span class="contact-label">Email</span>
+                <a href="mailto:rishabhshukla9512@gmail.com" class="contact-value">rishabhshukla9512@gmail.com</a>
+              </li>
+              <li>
+                <span class="contact-label">Phone</span>
+                <a href="tel:+919555474712" class="contact-value">+91 9555474712</a>
+              </li>
+              <li>
+                <span class="contact-label">Location</span>
+                <span class="contact-value">Tirwa Ganj, Kannauj (UP) · IIT Madras</span>
+              </li>
+              <li>
+                <span class="contact-label">Current Status</span>
+                <span class="status-indicator">
+                  <span class="status-pulse"></span>
+                  Open for AI / GenAI Roles
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Footer Bottom Bar -->
+        <div class="footer-bottom-bar">
+          <p class="copyright-text">
+            &copy; 2026 Rishabh Shukla. All rights reserved. Indian Institute of Technology Madras.
+          </p>
+
+          <div class="footer-legal-links">
+            <a href="Rishabh Shukla Resume.pdf" download="Rishabh_Shukla_Resume.pdf">Resume Download</a>
+            <span class="legal-separator">&bull;</span>
+            <a href="https://github.com/rs6739171-hash" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+          </div>
+
+          <!-- Back to Top Button -->
+          <button id="backToTop" class="back-to-top" aria-label="Back to top">
+            <span>Back to top</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m18 15-6-6-6 6"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
