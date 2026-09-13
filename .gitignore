@@ -1,5 +1,7 @@
 # Large Archives (exceeds GitHub 100MB single-file limit)
 video_frames_30fps_png.zip
+frames.zip
+*.zip
 
 # System & OS Files
 .DS_Store

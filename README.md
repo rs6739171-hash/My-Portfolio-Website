@@ -42,8 +42,8 @@ You can serve the portfolio using any static HTTP server (e.g. Python):
 
 ```bash
 # Clone the repository
-git clone https://github.com/rs6739171-hash/My_Potfolio_Website.git
-cd My_Potfolio_Website
+git clone https://github.com/rs6739171-hash/My-Portfolio-Website.git
+cd My-Portfolio-Website
 
 # Start a local HTTP server
 python -m http.server 8000
