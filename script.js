@@ -442,6 +442,90 @@
   }
 
   /**
+   * Project Live Demos & Automated Passcode Clipboard Integration
+   */
+  const demoToast = document.getElementById('demoToast');
+  const toastTitle = document.getElementById('toastTitle');
+  const toastMsg = document.getElementById('toastMsg');
+  let toastTimer = null;
+
+  function showDemoToast(title, message) {
+    if (!demoToast || !toastTitle || !toastMsg) return;
+    toastTitle.textContent = title;
+    toastMsg.textContent = message;
+    demoToast.classList.add('active');
+
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      demoToast.classList.remove('active');
+    }, 4000);
+  }
+
+  // Safe clipboard helper
+  function copyTextToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      textArea.style.top = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.error('Fallback copy failed', err);
+      }
+      document.body.removeChild(textArea);
+      return Promise.resolve();
+    }
+  }
+
+  // Live Demo Button & Header Link Listeners
+  const demoLinks = document.querySelectorAll('.btn-pill-demo, .frame-live-link');
+  demoLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const password = link.getAttribute('data-password');
+      const projectName = link.getAttribute('data-project-name') || 'Project';
+
+      if (password) {
+        copyTextToClipboard(password).catch(() => {});
+        showDemoToast(
+          `Launching ${projectName}`,
+          'Passcode auto-applied & copied to clipboard!'
+        );
+      }
+    });
+  });
+
+  // Interactive 1-Click Passcode Chips
+  const keyChips = document.querySelectorAll('.demo-key-chip');
+  keyChips.forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const key = chip.getAttribute('data-key');
+      if (!key) return;
+
+      copyTextToClipboard(key).then(() => {
+        chip.classList.add('copied');
+        const badge = chip.querySelector('.copy-badge');
+        if (badge) badge.textContent = '✓ Copied!';
+
+        showDemoToast('Passcode Copied!', 'Passcode ready to paste if prompted.');
+
+        setTimeout(() => {
+          chip.classList.remove('copied');
+          if (badge) badge.textContent = 'Copy';
+        }, 2200);
+      }).catch(() => {});
+    });
+  });
+
+  /**
    * Event Listeners & Initialization
    */
   window.addEventListener('scroll', onScroll, { passive: true });
