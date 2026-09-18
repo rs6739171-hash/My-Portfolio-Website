@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {"source": "/(.*).pdf", "headers": [{"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}
+  ]
+}

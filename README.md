@@ -1,61 +1,28 @@
-# Rishabh Shukla — Animated AI & GenAI Portfolio
+# Rishabh Shukla — AI & GenAI Portfolio
 
-> **Engineering Agentic Intelligence** · Aspiring AI/GenAI Engineer from Indian Institute of Technology Madras (IIT Madras), BS in Data Science & AI (CGPA 8.5).
+Personal portfolio, hosted at https://my-portfolio-website-topaz-beta.vercel.app/.
 
-A modern, high-performance animated portfolio website featuring a **240-frame full-screen canvas video animation engine**, buttery-smooth scroll momentum, and interactive live prototype simulators for flagship GenAI & multi-agent systems.
+A dependency-free static site using HTML, CSS, and JavaScript. No build step is required.
 
----
+## Local preview
 
-## 🚀 Live Demos & Flagship Repositories
+Run `python -m http.server 4173` in this directory and open `http://localhost:4173`.
 
-| Project | Tech Stack | Repository |
-| :--- | :--- | :--- |
-| **Enterprise Agentic RAG** | LangGraph, Portkey Gateway, Qdrant, Gemini, NeMo Guardrails, RAGAS | [Interprise_Grade_Rag_Application](https://github.com/rs6739171-hash/Interprise_Grade_Rag_Application) |
-| **Autonomous Multi-Agent Market Analyst** | LangGraph, FastAPI, Streamlit, yfinance, HITL | [Market_Analyst_Agent](https://github.com/rs6739171-hash/Market_Analyst_Agent) |
-| **Real-World Travel Planner System** | LangGraph, Model Context Protocol (MCP), PostgreSQL, Streamlit | [Travel_Planner_System](https://github.com/rs6739171-hash/Travel_Planner_System) |
+## Content and interaction
 
----
+- Three project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
+- Resume buttons open a preview or download `Rishabh_Shukla_Resume.pdf`. The legacy filename, `Rishabh Shukla Resume.pdf`, contains the same PDF so previously shared links keep working.
+- The resume preview image is a rendering of the PDF, not a separately authored document.
+- The contact dialog provides email, phone, and resume shortcuts. Copy actions report success only after the clipboard operation succeeds.
+- Ctrl/Cmd+K opens searchable quick navigation. Arrow keys, Enter, Escape, and ordinary Tab navigation work.
+- A dismissible recruiter shortcut appears after the visitor explores the page; dismissal is remembered for the tab session.
+- Animations honor `prefers-reduced-motion`. Content remains visible if JavaScript or IntersectionObserver is unavailable.
+- The hero uses one existing portrait frame. The original frame archive is retained in the repository but is no longer preloaded by the website.
 
-## ✨ Features
+## Updating
 
-- **240-Frame Smooth Scroll Engine**: Fixed HTML5 canvas with retina DPR scaling and centered proportional cover calculations.
-- **RAF Lerp Momentum**: Linear momentum interpolation (`lerp: 0.085`) on `requestAnimationFrame` eliminates discrete mousewheel stepping for smooth 60fps/120fps playback.
-- **Zero-Flicker Preloading**: Frame 1 displays instantly, while remaining frames preload concurrently with nearest-frame fallback to prevent any black flashes.
-- **Interactive Project Prototypes**: In-browser simulated terminal environments to test queries, trigger agent swarms, and inspect guardrail safety gates.
-- **Dark Luxury Editorial Aesthetic**: Inspired by modern Figma vector design bounding boxes, editorial serif typography, glassmorphism, and subtle ambient lighting scrims.
-- **Direct Resume Download**: Bundled with [Rishabh Shukla Resume.pdf](./Rishabh%20Shukla%20Resume.pdf).
+Edit page content in `index.html`, interaction data in `script.js`, and presentation in `style.css`. Replace both resume PDFs with identical bytes when updating, re-render `assets/resume-preview.jpg`, and update the version query on resume links.
 
----
+GitHub's `main` branch is connected to the existing Vercel production project. Feature branches create preview deployments through that connection.
 
-## 🛠️ Tech Stack
-
-- **Frontend Core**: Vanilla HTML5, Vanilla CSS3, Vanilla JavaScript (ES6+)
-- **Graphics**: HTML5 `<canvas>` 2D context
-- **Design Tokens**: Plus Jakarta Sans, Instrument Serif, CSS Variables, Glassmorphism
-- **Asset Optimization**: High-DPI frame scaling & concurrency control
-
----
-
-## 💻 Running Locally
-
-You can serve the portfolio using any static HTTP server (e.g. Python):
-
-```bash
-# Clone the repository
-git clone https://github.com/rs6739171-hash/My-Portfolio-Website.git
-cd My-Portfolio-Website
-
-# Start a local HTTP server
-python -m http.server 8000
-```
-
-Then open [http://localhost:8000](http://localhost:8000) in your web browser.
-
----
-
-## 📬 Contact & Connect
-
-- **Email**: [rishabhshukla9512@gmail.com](mailto:rishabhshukla9512@gmail.com)
-- **Phone**: +91 9555474712
-- **GitHub**: [github.com/rs6739171-hash](https://github.com/rs6739171-hash)
-- **Institute**: Indian Institute of Technology Madras (IIT Madras)
+The walkthroughs are clearly labeled examples; they do not run live agents or present measured evaluation scores. Hosted apps are separate services and may take time to start.
