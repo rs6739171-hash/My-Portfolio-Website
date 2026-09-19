@@ -1,7 +1,7 @@
 'use strict';
 (() => {
   // Existing hosted-demo destinations are retained from the previous portfolio.
-  const demoLinks = {"rag": "https://enterprise-rag-rishabh.onrender.com/?password=HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg#HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg", "market": "https://market-analyst-rishabh.onrender.com/?password=mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w#mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w", "travel": "https://travel-planner-rishabh.onrender.com/?password=gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU#gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU"};
+  const demoLinks = {"rag": "https://enterprise-rag-rishabh.onrender.com/?password=HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg#HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg", "market": "https://market-analyst-rishabh.onrender.com/?password=mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w#mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w", "travel": "https://travel-planner-rishabh.onrender.com/?password=gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU#gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU", "clinical": "https://secure-clinical-ehr-validator.onrender.com"};
   const projects = {
     rag: {
       title: 'Enterprise Agentic RAG', kicker: '01 / KNOWLEDGE SYSTEMS',
@@ -31,12 +31,21 @@
       workflow: ['Trip request & validation', 'Route specialist tasks', 'Combine research & budget', 'Review or revise', 'Finalize itinerary'],
       steps: ['A destination, duration, and budget form the trip request. Guardrails validate it before tool calls.', 'The supervisor routes relevant work to the flight, hotel, weather, and budget specialists.', 'The itinerary agent combines the research and budget constraints into a proposed plan.', 'The user reviews the itinerary and can request changes. Choose approval below to continue this illustrative walkthrough.', 'The approved itinerary is finalized. Checkpointing lets a session resume later; the planner does not book flights or hotels.'],
       approval: 3
+    },
+    clinical: {
+      title: 'Secure Clinical EHR Insight Validator', kicker: '04 / AI SAFETY & HEALTHCARE',
+      description: 'A deployed synthetic clinical-record retrieval application with explicit patient scoping, deterministic safety guardrails, identifier redaction, evidence citations, and grounding validation.',
+      tags: ['FastAPI', 'Streamlit', 'Scoped RAG', 'Safety Guardrails', 'PHI Redaction', 'Grounding Validation'],
+      sourceUrl: 'https://github.com/rs6739171-hash/My-Portfolio-Website/tree/main/projects/Secure_Clinical_EHR_Validator',
+      features: ['Patient-scoped retrieval ensures a query only searches the selected synthetic record.', 'Deterministic safety checks block treatment advice, prompt injection, and cross-patient data-exfiltration requests before generation.', 'Identifiers are redacted before the optional OpenAI-compatible LLM layer; the application also works without any paid model API.', 'Every successful answer exposes retrieved evidence, encounter citations, retrieval scores, and a grounding score. Automated tests and a nine-case evaluation suite are included.'],
+      workflow: ['Select synthetic patient', 'Classify request safety', 'Retrieve scoped evidence', 'Redact external context', 'Generate & validate grounding'],
+      steps: ['The visitor selects one synthetic demo patient; the retrieval boundary is fixed to that patient.', 'A deterministic gate classifies medical-advice, prompt-injection, and cross-patient exfiltration requests before retrieval or generation.', 'A lightweight retrieval layer ranks encounters only inside the selected patient record and returns evidence with encounter IDs.', 'Common identifiers are redacted before context can be sent to an optional external LLM. Without an API key, evidence-first extractive mode remains fully functional.', 'The grounding validator checks the response against retrieved evidence. Low-support LLM output falls back to an extractive answer with citations.']
     }
   };
   const skills = {
     agents: {title: 'Agents that collaborate.', description: 'I use explicit graph state and specialist roles to make multi-agent workflows easier to follow and control.', examples: ['LangGraph coordinates the Fundamental Analyst, Technical Analyst, and Portfolio Manager in the Market Analyst.', 'The Travel Planner supervisor routes tasks to specialist agents and exposes a human review step.', 'MCP connects external research tools to the travel workflow.'], project: 'market'},
     retrieval: {title: 'Answers with context.', description: 'The retrieval pipeline connects a user question to relevant document passages before generating an answer.', examples: ['Gemini Embeddings represent queries and documents for semantic search.', 'Qdrant stores and retrieves vectors; FlashRank reranks the candidate passages.', 'Planner, Retriever, and Responder agents coordinate the RAG workflow.'], project: 'rag'},
-    reliability: {title: 'Trust, then verify.', description: 'Quality checks belong inside an AI application, alongside the features a user sees.', examples: ['NeMo Guardrails checks RAG inputs for off-topic or unsafe requests.', 'RAGAS supports answer and retrieval evaluation; LangSmith and Logfire provide observability.', 'Human-in-the-loop steps make review explicit in the market and travel projects.'], project: 'rag'},
+    reliability: {title: 'Trust, then verify.', description: 'Quality checks belong inside an AI application, alongside the features a user sees.', examples: ['NeMo Guardrails checks RAG inputs for off-topic or unsafe requests.', 'The clinical validator blocks treatment advice, prompt injection, and cross-patient exfiltration before generation.', 'RAGAS, grounding checks, LangSmith and Logfire make quality and failure modes visible.'], project: 'clinical'},
     delivery: {title: 'From code to product.', description: 'I work across the application: Python logic, API endpoints, interfaces, persistent state, and deployment configuration.', examples: ['FastAPI and Streamlit provide backend and interface layers for the projects.', 'PostgreSQL-backed checkpoints support resumable travel planning sessions.', 'Git, GitHub Actions, validation tests, and Render deployment configuration support delivery.'], project: 'travel'}
   };
   const $ = (selector) => document.querySelector(selector);
@@ -137,7 +146,7 @@
     fillList($('#projectDialogFeatures'), project.features);
     fillList($('#projectDialogWorkflow'), project.workflow);
     $('#projectDemoLink').href = demoLinks[key];
-    $('#projectSourceLink').href = `https://github.com/rs6739171-hash/${project.repository}`;
+    $('#projectSourceLink').href = project.sourceUrl || `https://github.com/rs6739171-hash/${project.repository}`;
     $('#walkthroughNext').textContent = 'Start walkthrough →';
     $('#walkthroughOutput').textContent = 'Explore how the agents work together, one step at a time.';
     openDialog('project', trigger);
@@ -172,6 +181,7 @@
     {label:'Enterprise Agentic RAG', hint:'Project', keywords:'retrieval knowledge ragas qdrant', project:'rag'},
     {label:'Market Analyst', hint:'Project', keywords:'stocks langgraph research', project:'market'},
     {label:'Travel Planner', hint:'Project', keywords:'trip mcp itinerary', project:'travel'},
+    {label:'Secure Clinical EHR Validator', hint:'Project', keywords:'clinical healthcare safety guardrails retrieval grounding ehr', project:'clinical'},
     {label:'View resume', hint:'PDF preview', keywords:'cv download education', dialog:'resume'},
     {label:'Contact Rishabh', hint:'Email & phone', keywords:'hire recruiter connect linkedin', dialog:'contact'},
     {label:'About & experience', hint:'Section', keywords:'education iit analyst', section:'about'},
