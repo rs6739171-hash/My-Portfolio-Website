@@ -198,6 +198,87 @@ _HOP_BY_HOP = {
 }
 
 
+
+def _chat_page() -> HTMLResponse:
+    page = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Private OpenJarvis</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#080b10;color:#e9eef7;font-family:Inter,system-ui,-apple-system,sans-serif}
+.shell{min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;max-width:980px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid #202938;background:#0c1119cc;backdrop-filter:blur(12px);position:sticky;top:0;z-index:2}
+.brand{display:flex;align-items:center;gap:11px}.dot{width:10px;height:10px;border-radius:50%;background:#7d8cff;box-shadow:0 0 24px #7d8cff}
+h1{font-size:16px;margin:0}.sub{font-size:11px;color:#718096;margin-top:3px}
+.actions{display:flex;gap:8px}.actions button,.actions a{border:1px solid #2a3548;background:#121925;color:#c7d2e5;border-radius:9px;padding:8px 11px;text-decoration:none;font-size:12px;cursor:pointer}
+#messages{padding:28px 20px 150px;display:flex;flex-direction:column;gap:16px}
+.msg{max-width:82%;padding:13px 15px;border-radius:14px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.user{align-self:flex-end;background:#29385a;color:#fff;border-bottom-right-radius:4px}
+.assistant{align-self:flex-start;background:#111925;border:1px solid #263247;color:#dce5f5;border-bottom-left-radius:4px}
+.status{font-size:12px;color:#75859d;text-align:center;padding:8px}
+.composer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(980px,100%);padding:14px 20px 20px;background:linear-gradient(transparent,#080b10 28%)}
+.box{display:flex;gap:10px;align-items:flex-end;border:1px solid #2a3548;background:#101720;border-radius:16px;padding:10px}
+textarea{flex:1;min-height:46px;max-height:180px;resize:none;border:0;outline:0;background:transparent;color:#f5f7fb;font:inherit;padding:10px}
+.send{border:0;border-radius:11px;padding:11px 16px;background:#e7ebf5;color:#111827;font-weight:700;cursor:pointer}.send:disabled{opacity:.45;cursor:wait}
+.note{font-size:10px;color:#5f6e83;text-align:center;margin-top:8px}
+@media(max-width:640px){.msg{max-width:92%}header{padding:14px}.composer{padding:10px 12px 14px}#messages{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+<body><div class="shell">
+<header><div class="brand"><span class="dot"></span><div><h1>OpenJarvis · Private</h1><div class="sub">Mistral Small · simple agent · tools disabled</div></div></div>
+<div class="actions"><button id="clear">Clear</button><a href="/logout">Lock</a></div></header>
+<main id="messages"><div class="status">Private session active. Messages are sent through your secured OpenJarvis backend.</div></main>
+<div class="composer"><div class="box"><textarea id="prompt" placeholder="Message Jarvis…" rows="1"></textarea><button class="send" id="send">Send</button></div><div class="note">Initial hardened mode: no shell, file access, MCP, channels, or autonomous tasks.</div></div>
+</div>
+<script>
+const messages=[];
+const list=document.getElementById('messages');
+const prompt=document.getElementById('prompt');
+const send=document.getElementById('send');
+function add(role,text){
+  const el=document.createElement('div');
+  el.className='msg '+(role==='user'?'user':'assistant');
+  el.textContent=text;
+  list.appendChild(el);
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+async function submit(){
+  const text=prompt.value.trim(); if(!text||send.disabled)return;
+  prompt.value=''; add('user',text); messages.push({role:'user',content:text}); send.disabled=true;
+  const waiting=document.createElement('div'); waiting.className='msg assistant'; waiting.textContent='Thinking…'; list.appendChild(waiting);
+  try{
+    const res=await fetch('/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'mistral/mistral-small-latest',messages,temperature:0.3,max_tokens:1024,stream:false
+    })});
+    if(res.status===401){location.href='/login';return}
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.detail||data.error?.message||('HTTP '+res.status));
+    const answer=data.choices?.[0]?.message?.content||'No response content returned.';
+    waiting.remove(); add('assistant',answer); messages.push({role:'assistant',content:answer});
+  }catch(err){waiting.textContent='Error: '+err.message}
+  finally{send.disabled=false;prompt.focus()}
+}
+send.addEventListener('click',submit);
+prompt.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit()}});
+document.getElementById('clear').addEventListener('click',()=>{messages.length=0;[...list.querySelectorAll('.msg')].forEach(x=>x.remove())});
+prompt.focus();
+</script></body></html>"""
+    response = HTMLResponse(page)
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    return response
+
+
+@app.get("/")
+async def private_chat(request: Request):
+    if _requires_login(request):
+        return RedirectResponse("/login", status_code=303)
+    return _chat_page()
+
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
 async def proxy_http(path: str, request: Request):
     if _requires_login(request):
