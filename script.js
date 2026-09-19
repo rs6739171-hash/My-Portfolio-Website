@@ -5,10 +5,10 @@
   const projects = {
     rag: {
       title: 'Enterprise Agentic RAG', kicker: '01 / KNOWLEDGE SYSTEMS',
-      description: 'A document question-answering system that combines agent planning, semantic retrieval, reranking, and guardrails. Built with a FastAPI backend and interactive interfaces.',
+      description: 'A deployed document question-answering system combining LangGraph routing, semantic retrieval, reranking, guardrails, and a dedicated evaluation application.',
       tags: ['LangGraph', 'Qdrant', 'Gemini Embeddings', 'FlashRank', 'Portkey', 'RAGAS'],
-      repository: 'Interprise_Grade_Rag_Application',
-      features: ['Planner, Retriever, and Responder agents with conditional routing and conversation memory.', 'Gemini Embeddings and Qdrant Cloud for semantic retrieval, with FlashRank cross-encoder reranking.', 'NeMo Guardrails for input checks and Portkey for LLM gateway routing.', 'RAGAS evaluation, Logfire / LangSmith observability, validation tests, and deployment configuration.'],
+      repository: 'Enterprise_Agentic_RAG',
+      features: ['Planner, Retriever, and Responder agents with conditional routing and conversation memory.', 'Gemini Embeddings and Qdrant Cloud for semantic retrieval, with FlashRank cross-encoder reranking.', 'NeMo Guardrails for input checks and Portkey for LLM gateway routing.', 'A hosted evaluation app measures four quality rubrics, routing, latency, and six safety cases; optional local RAGAS scoring is also supported.'],
       workflow: ['Question & conversation', 'Safety checks', 'Plan & retrieve context', 'Rerank evidence', 'Generate & evaluate'],
       steps: ['A question arrives with the conversation history. The planner determines which information is needed.', 'The safety gate checks the request before the retrieval and response stages.', 'The retriever searches the document collection in Qdrant using semantic embeddings.', 'FlashRank reorders candidate passages so the response receives the most relevant context.', 'The responder generates an answer from the selected context. The evaluation pipeline can assess answer and retrieval quality.']
     },
