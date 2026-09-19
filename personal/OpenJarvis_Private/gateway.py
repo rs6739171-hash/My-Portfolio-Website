@@ -13,6 +13,8 @@ from urllib.parse import parse_qs
 import httpx
 import websockets
 from fastapi import FastAPI, Request, WebSocket
+
+from security_keys import derive_runtime_keys
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 
 
@@ -20,8 +22,7 @@ INTERNAL_HTTP = os.getenv("OPENJARVIS_INTERNAL_URL", "http://127.0.0.1:8001").rs
 INTERNAL_WS = INTERNAL_HTTP.replace("http://", "ws://").replace("https://", "wss://")
 APP_USER = os.getenv("APP_USER", "rishabh")
 APP_PASSWORD = os.getenv("APP_PASSWORD", "")
-SESSION_SECRET = os.getenv("SESSION_SECRET", "")
-INTERNAL_API_KEY = os.getenv("OPENJARVIS_API_KEY", "")
+INTERNAL_API_KEY, SESSION_SECRET = derive_runtime_keys(APP_PASSWORD) if APP_PASSWORD else ("", "")
 COOKIE = "oj_private_session"
 SESSION_SECONDS = 12 * 60 * 60
 MAX_LOGIN_ATTEMPTS = 5
