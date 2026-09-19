@@ -11,7 +11,7 @@ from pathlib import Path
 import httpx
 import uvicorn
 
-from gateway import app
+from security_keys import derive_runtime_keys
 
 
 BASE = Path(__file__).resolve().parent
@@ -50,13 +50,17 @@ def _wait_for_backend(process: subprocess.Popen, timeout: float = 75.0) -> None:
 
 def main() -> int:
     _require("MISTRAL_API_KEY")
-    _require("OPENJARVIS_API_KEY")
-    _require("APP_PASSWORD")
-    _require("SESSION_SECRET")
+    app_password = _require("APP_PASSWORD")
+    internal_api_key, session_secret = derive_runtime_keys(app_password)
+    os.environ["OPENJARVIS_API_KEY"] = internal_api_key
+    os.environ["SESSION_SECRET"] = session_secret
     _prepare_config()
+
+    from gateway import app
 
     env = os.environ.copy()
     env["OPENJARVIS_HOME"] = str(HOME)
+    env["OPENJARVIS_API_KEY"] = internal_api_key
 
     jarvis = subprocess.Popen(
         [
