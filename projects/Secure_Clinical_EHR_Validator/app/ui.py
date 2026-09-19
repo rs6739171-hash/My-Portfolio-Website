@@ -4,7 +4,7 @@ import os
 import requests
 import streamlit as st
 
-from .config import settings
+from app.config import settings
 
 API_URL = os.getenv("API_URL", settings.api_url).rstrip("/")
 
