@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .models import QueryRequest, QueryResponse
+from .llm import verify_provider_access
 from .retrieval import list_patients
 from .service import answer_query
 
@@ -22,10 +23,23 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
+@app.on_event("startup")
+async def startup_provider_check():
+    ready, message = await verify_provider_access()
+    app.state.llm_provider_ready = ready
+    app.state.llm_provider_message = message
+    print(f"LLM provider check: {message}")
+
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "llm_mode_available": settings.llm_enabled, "data": "synthetic-only"}
+    return {
+        "status": "ok",
+        "llm_mode_available": settings.llm_enabled,
+        "llm_provider_ready": getattr(app.state, "llm_provider_ready", False),
+        "llm_model": settings.llm_model if settings.llm_enabled else None,
+        "data": "synthetic-only",
+    }
 
 
 @app.get("/api/v1/patients")
