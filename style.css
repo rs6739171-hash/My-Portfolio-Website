@@ -51,3 +51,22 @@
 .clinical-result span{display:block;margin-top:3px;font-size:.6875rem;color:#9aac9e}
 @media(max-width:800px){.project-grid [data-project-card="clinical"]{grid-template-columns:1fr}.project-grid [data-project-card="clinical"] .project-visual{min-height:270px;border-right:0;border-bottom:1px solid var(--line)}}
 @media(max-width:620px){.clinical-flow{gap:7px}.clinical-node{min-width:72px;height:68px;font-size:.625rem;padding:6px}.clinical-result{width:96%;margin-top:18px}.clinical-result strong{font-size:.75rem}.clinical-result span{font-size:.625rem}}
+
+
+/* Credit risk SHAP project */
+.credit-project{grid-column:1/-1;display:grid;grid-template-columns:1.08fr .92fr}
+.credit-project .project-visual{height:auto;min-height:310px;border-bottom:0;border-right:1px solid var(--line);justify-content:center}
+.credit-project .project-copy{display:flex;flex-direction:column;justify-content:center}
+.credit-visual{background:radial-gradient(ellipse at center,#33485b44,transparent 78%),#17202a}
+.credit-visual .tiny-square{background:var(--blue)}
+.credit-score-card{width:88%;display:flex;align-items:center;justify-content:space-between;border:1px solid #526a805f;background:#202b37;border-radius:11px;padding:16px 18px;color:#c7d7e8}
+.credit-score-card span{display:block;font-size:.5rem;letter-spacing:.09em;color:#8699ad}
+.credit-score-card strong{display:block;margin-top:4px;font-size:.875rem;font-weight:500}
+.credit-score-card>.icon{width:24px;height:24px;color:var(--blue)}
+.credit-explain-row{display:flex;align-items:center;gap:12px;width:88%;margin-top:18px}
+.credit-explain-row>div{flex:1;display:flex;align-items:center;gap:9px;border:1px solid #526a8050;background:#1d2732;border-radius:9px;padding:12px;color:#b9c9da;font-size:.6875rem}
+.credit-explain-row .icon{width:17px;height:17px;color:var(--blue)}
+.credit-result{display:flex;align-items:center;gap:10px;margin-top:18px;color:#9fc7b0;font-size:.6875rem}
+.credit-result .icon{width:17px;height:17px}
+@media(max-width:800px){.credit-project{grid-template-columns:1fr}.credit-project .project-visual{min-height:270px;border-right:0;border-bottom:1px solid var(--line)}}
+@media(max-width:620px){.credit-score-card,.credit-explain-row{width:96%}.credit-explain-row{gap:7px}.credit-explain-row>div{padding:10px 8px;font-size:.625rem}}
