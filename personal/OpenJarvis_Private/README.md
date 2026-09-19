@@ -11,7 +11,7 @@ License: Apache-2.0 (upstream license and authorship remain with the OpenJarvis 
 2. Successful login creates a signed, HttpOnly, Secure, SameSite=Strict session cookie.
 3. Failed logins are rate-limited in memory.
 4. OpenJarvis itself binds only to `127.0.0.1:8001`.
-5. The internal OpenJarvis API keeps its separate `OPENJARVIS_API_KEY`; the gateway injects it server-side.
+5. The service derives a separate internal OpenJarvis bearer key and cookie-signing key from the deployment password at runtime; neither derived value is committed or manually stored.
 6. OpenJarvis starts with the `simple` agent and no tools/MCP, with security scanning and default-deny capabilities enabled.
 7. External anonymous analytics and local telemetry/traces are disabled in the supplied personal config.
 
@@ -19,10 +19,8 @@ License: Apache-2.0 (upstream license and authorship remain with the OpenJarvis 
 
 Never commit these:
 
-- `MISTRAL_API_KEY`
-- `OPENJARVIS_API_KEY`
 - `APP_PASSWORD`
-- `SESSION_SECRET`
+- `MISTRAL_API_KEY`
 
 Optional:
 
