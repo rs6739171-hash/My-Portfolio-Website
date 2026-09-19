@@ -26,3 +26,11 @@
 @media(max-width:1100px){.portrait-topline{font-size:.625rem}.project-meta{flex-wrap:wrap}}
 @media(max-width:800px){.portrait-topline{font-size:.5625rem}.visual-header{font-size:.625rem}.skill-number{font-size:.6875rem}}
 @media(max-width:620px){.portrait-topline{font-size:.625rem}.portrait-caption .eyebrow,.portrait-index{font-size:.6875rem}.project-type{font-size:.625rem}.hero-footnote{font-size:.75rem}.hero-footnote .footnote-separator{display:none}.skill-card p,.skill-list li{font-size:.875rem}.skill-number{font-size:.625rem}.skill-card>.text-link{font-size:.8125rem}.visual-header{font-size:.6875rem}.command-footer{font-size:.75rem}.contact-bottom p{font-size:.875rem}.footer-links{font-size:.8125rem;flex-wrap:wrap}.recruiter-summary>span{font-size:.8125rem}.workflow-list li{font-size:.875rem}.portrait-note div>span{font-size:.75rem}.portrait-note strong{font-size:.8125rem}.travel-request span{font-size:.5625rem}}
+
+
+/* Recruiter proof strip */
+.proof-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line);max-width:650px}
+.proof-row span{display:flex;align-items:baseline;gap:7px;font-size:.75rem;color:var(--muted);letter-spacing:.02em}
+.proof-row strong{font-size:1rem;color:var(--text);font-weight:650}
+.project-live-link{font-size:.8125rem;white-space:nowrap}
+@media(max-width:620px){.proof-row{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:20px;padding-top:17px}.proof-row span{font-size:.6875rem}.proof-row strong{font-size:.9375rem}.project-actions{flex-wrap:wrap}.project-live-link{font-size:.75rem}}
