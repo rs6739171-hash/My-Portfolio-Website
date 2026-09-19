@@ -2,7 +2,11 @@
 
 **Python · scikit-learn · SHAP · FastAPI · Streamlit · model evaluation · scenario analysis**
 
-A portfolio-grade explainable machine-learning application by **Rishabh Shukla**. It estimates synthetic credit-risk probabilities, shows the strongest SHAP drivers behind each score, and supports what-if analysis without using protected demographic attributes.
+A portfolio-grade explainable machine-learning application by **Rishabh Shukla**.
+
+**Live demo:** https://explainable-credit-risk-shap.onrender.com
+
+**Measured synthetic holdout:** ROC-AUC **0.8109** · PR-AUC **0.5686** · Recall **0.6420** · F1 **0.5554** · Brier score **0.1701** · threshold **0.5850** on **2,250** holdout rows. It estimates synthetic credit-risk probabilities, shows the strongest SHAP drivers behind each score, and supports what-if analysis without using protected demographic attributes.
 
 > **Important:** This is an educational portfolio demo using generated synthetic data. It is not a lending product, credit bureau model, underwriting policy, or regulatory-compliance system and must not be used to approve or deny real credit.
 
