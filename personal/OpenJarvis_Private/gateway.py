@@ -30,6 +30,8 @@ LOGIN_WINDOW_SECONDS = 15 * 60
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 _attempts: dict[str, deque[float]] = defaultdict(deque)
+_requests: dict[str, deque[float]] = defaultdict(deque)
+REQUESTS_PER_MINUTE = 30
 
 
 def _b64(data: bytes) -> str:
@@ -82,6 +84,17 @@ def _rate_limited(ip: str) -> bool:
 
 def _record_failure(ip: str) -> None:
     _attempts[ip].append(time.time())
+
+
+def _request_rate_limited(ip: str) -> bool:
+    now = time.time()
+    bucket = _requests[ip]
+    while bucket and now - bucket[0] > 60:
+        bucket.popleft()
+    if len(bucket) >= REQUESTS_PER_MINUTE:
+        return True
+    bucket.append(now)
+    return False
 
 
 def _login_page(error: str = "") -> HTMLResponse:
@@ -285,6 +298,10 @@ async def proxy_http(path: str, request: Request):
         if request.method == "GET" and "text/html" in request.headers.get("accept", ""):
             return RedirectResponse("/login", status_code=303)
         return JSONResponse({"detail": "Private session required"}, status_code=401)
+
+    ip = _client_ip(request)
+    if path.startswith(("v1/", "api/")) and _request_rate_limited(ip):
+        return JSONResponse({"detail": "Request rate limit exceeded"}, status_code=429)
 
     url = f"{INTERNAL_HTTP}/{path}"
     if request.url.query:
