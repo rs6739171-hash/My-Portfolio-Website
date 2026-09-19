@@ -63,3 +63,25 @@ async def generate_answer(question: str, evidence_text: str) -> str | None:
         data = response.json()
 
     return _message_text(data["choices"][0]["message"]["content"])
+
+
+async def verify_provider_access() -> tuple[bool, str]:
+    if not settings.llm_enabled:
+        return False, "LLM environment variables are not fully configured."
+    url = settings.llm_api_base.rstrip("/") + "/models"
+    headers = {"Authorization": f"Bearer {settings.llm_api_key}"}
+    try:
+        async with httpx.AsyncClient(timeout=settings.llm_timeout_seconds) as client:
+            response = await client.get(url, headers=headers)
+            response.raise_for_status()
+            payload = response.json()
+        model_ids = {
+            item.get("id")
+            for item in payload.get("data", [])
+            if isinstance(item, dict) and item.get("id")
+        }
+        if settings.llm_model in model_ids:
+            return True, f"Provider authenticated; {settings.llm_model} is available."
+        return True, f"Provider authenticated; model listing returned successfully."
+    except Exception as exc:
+        return False, f"Provider validation failed: {type(exc).__name__}"
