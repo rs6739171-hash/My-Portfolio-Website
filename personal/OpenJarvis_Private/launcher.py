@@ -32,6 +32,20 @@ def _prepare_config() -> None:
     shutil.copyfile(BASE / "safe_config.toml", HOME / "config.toml")
 
 
+def _verify_mistral_provider() -> None:
+    api_key = _require("MISTRAL_API_KEY")
+    response = httpx.get(
+        "https://api.mistral.ai/v1/models",
+        headers={"Authorization": f"Bearer {api_key}"},
+        timeout=20.0,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if not isinstance(payload.get("data"), list):
+        raise SystemExit("Mistral provider validation returned an unexpected response.")
+    print("Mistral provider check: authenticated successfully (zero-token verification).")
+
+
 def _wait_for_backend(process: subprocess.Popen, timeout: float = 75.0) -> None:
     deadline = time.time() + timeout
     health = f"http://127.0.0.1:{INTERNAL_PORT}/health"
@@ -50,6 +64,7 @@ def _wait_for_backend(process: subprocess.Popen, timeout: float = 75.0) -> None:
 
 def main() -> int:
     _require("MISTRAL_API_KEY")
+    _verify_mistral_provider()
     app_password = _require("APP_PASSWORD")
     internal_api_key, session_secret = derive_runtime_keys(app_password)
     os.environ["OPENJARVIS_API_KEY"] = internal_api_key
