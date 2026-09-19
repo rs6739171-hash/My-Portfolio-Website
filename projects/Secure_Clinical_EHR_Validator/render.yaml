@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: secure-clinical-ehr-validator
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python serve.py
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      - key: APP_PASSWORD
+        generateValue: true
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_API_BASE
+        sync: false
+      - key: LLM_MODEL
+        sync: false
