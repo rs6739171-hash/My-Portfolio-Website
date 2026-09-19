@@ -73,12 +73,16 @@ Open the Streamlit URL shown in the terminal. FastAPI stays on `127.0.0.1:8000`.
 
 ## Optional LLM mode
 
-The app is fully functional without an API key. To enable an OpenAI-compatible provider:
+The app is fully functional without an API key. The hosted demo is configured for Mistral's OpenAI-compatible API using `mistral-small-latest`; the secret stays in Render environment variables. Generation is capped at 20 calls/hour and 320 output tokens per call, with extractive fallback when the hourly budget is reached.
+
+To configure another OpenAI-compatible provider:
 
 ~~~env
 LLM_API_KEY=your-key
 LLM_API_BASE=https://provider.example.com/openai/v1
 LLM_MODEL=your-model-name
+MAX_LLM_CALLS_PER_HOUR=20
+LLM_MAX_TOKENS=320
 ~~~
 
 No real patient identifier is intentionally sent to the optional LLM provider.
