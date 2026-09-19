@@ -1,0 +1,27 @@
+name: Clinical Validator CI
+
+on:
+  push:
+    branches: [secure-clinical-ehr]
+    paths:
+      - "projects/Secure_Clinical_EHR_Validator/**"
+      - ".github/workflows/clinical-validator-ci.yml"
+  pull_request:
+    paths:
+      - "projects/Secure_Clinical_EHR_Validator/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/Secure_Clinical_EHR_Validator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m compileall -q app evals serve.py
+      - run: python -m evals.run_eval
