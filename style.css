@@ -34,3 +34,20 @@
 .proof-row strong{font-size:1rem;color:var(--text);font-weight:650}
 .project-live-link{font-size:.8125rem;white-space:nowrap}
 @media(max-width:620px){.proof-row{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:20px;padding-top:17px}.proof-row span{font-size:.6875rem}.proof-row strong{font-size:.9375rem}.project-actions{flex-wrap:wrap}.project-live-link{font-size:.75rem}}
+
+
+/* Clinical EHR project */
+.project-grid [data-project-card="clinical"]{grid-column:1/-1;display:grid;grid-template-columns:.92fr 1.08fr}
+.project-grid [data-project-card="clinical"] .project-visual{height:auto;min-height:310px;border-bottom:0;border-right:1px solid var(--line);justify-content:center}
+.project-grid [data-project-card="clinical"] .project-copy{display:flex;flex-direction:column;justify-content:center}
+.clinical-visual{background:radial-gradient(ellipse at center,#5b494348,transparent 78%),#211b1a}
+.clinical-visual .tiny-square{background:var(--accent)}
+.clinical-flow{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+.clinical-node{min-width:92px;height:76px;border:1px solid #735f524f;background:#2d2623;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#e0c5b5;font-size:.6875rem;text-align:center;padding:8px}
+.clinical-node .icon{width:20px;height:20px;color:var(--accent)}
+.clinical-result{display:flex;align-items:center;gap:12px;margin-top:24px;width:88%;border:1px solid #52685870;background:#222d27;border-radius:11px;padding:14px 17px;color:var(--mint)}
+.clinical-result>.icon{width:20px;height:20px}
+.clinical-result strong{display:block;font-size:.8125rem;font-weight:500}
+.clinical-result span{display:block;margin-top:3px;font-size:.6875rem;color:#9aac9e}
+@media(max-width:800px){.project-grid [data-project-card="clinical"]{grid-template-columns:1fr}.project-grid [data-project-card="clinical"] .project-visual{min-height:270px;border-right:0;border-bottom:1px solid var(--line)}}
+@media(max-width:620px){.clinical-flow{gap:7px}.clinical-node{min-width:72px;height:68px;font-size:.625rem;padding:6px}.clinical-result{width:96%;margin-top:18px}.clinical-result strong{font-size:.75rem}.clinical-result span{font-size:.625rem}}
