@@ -4,13 +4,22 @@ Personal portfolio, hosted at https://my-portfolio-website-topaz-beta.vercel.app
 
 A dependency-free static site using HTML, CSS, and JavaScript. No build step is required.
 
+## Featured AI systems
+
+- **Enterprise Agentic RAG** — retrieval, reranking, guardrails, hosted evaluation, FastAPI and Qdrant.
+- **Multi-Agent Market Analyst** — LangGraph specialist agents with human approval.
+- **Multi-Agent Travel Planner** — tool-using agents, MCP integrations and persistent workflow state.
+- **Secure Clinical EHR Insight Validator** — synthetic patient-scoped retrieval with safety guardrails, identifier redaction, citations and grounding validation. Live at https://secure-clinical-ehr-validator.onrender.com.
+
+The clinical project source lives at `projects/Secure_Clinical_EHR_Validator/` and includes its own README, tests, evaluation suite, attribution, Dockerfile and Render configuration.
+
 ## Local preview
 
 Run `python -m http.server 4173` in this directory and open `http://localhost:4173`.
 
 ## Content and interaction
 
-- Three project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
+- Four project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
 - Resume buttons open a preview or download `Rishabh_Shukla_Resume.pdf`. The legacy filename, `Rishabh Shukla Resume.pdf`, contains the same PDF so previously shared links keep working.
 - The resume preview image is a rendering of the PDF, not a separately authored document.
 - The contact dialog provides email, phone, and resume shortcuts. Copy actions report success only after the clipboard operation succeeds.
