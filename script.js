@@ -147,6 +147,9 @@
     fillList($('#projectDialogWorkflow'), project.workflow);
     $('#projectDemoLink').href = demoLinks[key];
     $('#projectSourceLink').href = project.sourceUrl || `https://github.com/rs6739171-hash/${project.repository}`;
+    const demoUrl = new URL(demoLinks[key]);
+    const hasPasscode = Boolean(demoUrl.searchParams.get('password') || demoUrl.hash.slice(1));
+    $('#copyDemoPasscode').hidden = !hasPasscode;
     $('#walkthroughNext').textContent = 'Start walkthrough →';
     $('#walkthroughOutput').textContent = 'Explore how the agents work together, one step at a time.';
     openDialog('project', trigger);
