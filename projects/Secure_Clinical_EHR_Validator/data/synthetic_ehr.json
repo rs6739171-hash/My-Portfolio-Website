@@ -1,0 +1,24 @@
+[
+  {
+    "patient_id": "DEMO-1001",
+    "encounters": [
+      {"id":"E1001-1","date":"2026-03-11","type":"Emergency","summary":"Presented with shortness of breath and bilateral lower-extremity edema. Chest imaging noted pulmonary vascular congestion.","medications":["Furosemide 40 mg IV"],"labs":["BNP 780 pg/mL","Creatinine 1.2 mg/dL"],"diagnoses":["Acute decompensated heart failure"]},
+      {"id":"E1001-2","date":"2026-03-12","type":"Inpatient","summary":"Urine output improved after diuresis. Oxygen requirement decreased. Renal function remained stable.","medications":["Furosemide 40 mg IV twice daily"],"labs":["Creatinine 1.1 mg/dL","Potassium 4.0 mmol/L"],"diagnoses":["Heart failure with volume overload"]},
+      {"id":"E1001-3","date":"2026-03-14","type":"Discharge","summary":"Symptoms improved and the patient was discharged with follow-up instructions.","medications":["Furosemide 40 mg oral daily"],"labs":["Creatinine 1.0 mg/dL"],"diagnoses":["Heart failure, improved"]}
+    ]
+  },
+  {
+    "patient_id": "DEMO-1002",
+    "encounters": [
+      {"id":"E1002-1","date":"2026-05-01","type":"Routine","summary":"Admitted for evaluation of jaundice and abdominal distension. Ultrasound showed nodular liver morphology and ascites.","medications":["Lactulose 20 g oral"],"labs":["Total bilirubin 4.2 mg/dL","Albumin 2.8 g/dL"],"diagnoses":["Cirrhosis","Ascites"]},
+      {"id":"E1002-2","date":"2026-05-02","type":"Inpatient","summary":"Diagnostic paracentesis was performed. Culture result was documented for clinician review.","medications":["Lactulose 20 g oral"],"labs":["Ascitic fluid PMN 320 cells/mm3"],"diagnoses":["Cirrhosis with ascites"]}
+    ]
+  },
+  {
+    "patient_id": "DEMO-1003",
+    "encounters": [
+      {"id":"E1003-1","date":"2026-07-18","type":"Emergency","summary":"Presented with fever, dysuria, and flank discomfort. Urinalysis was positive for leukocyte esterase and nitrites.","medications":["Ceftriaxone 1 g IV"],"labs":["WBC 14.1 K/uL","Creatinine 0.9 mg/dL"],"diagnoses":["Pyelonephritis"]},
+      {"id":"E1003-2","date":"2026-07-20","type":"Discharge","summary":"Fever resolved and oral intake improved. Discharge documentation recorded a completed inpatient antibiotic course.","medications":["Ceftriaxone 1 g IV during admission"],"labs":["WBC 8.7 K/uL"],"diagnoses":["Pyelonephritis, improved"]}
+    ]
+  }
+]
