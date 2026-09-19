@@ -2,7 +2,11 @@
 
 **FastAPI · Streamlit · scoped RAG · safety guardrails · PHI redaction · grounding validation · optional LLM**
 
-A portfolio-grade clinical information retrieval demo by **Rishabh Shukla**. It demonstrates how an AI application can retrieve evidence from a selected synthetic patient record while enforcing patient scope, blocking diagnosis/treatment requests, redacting identifiers before optional external LLM calls, and validating generated answers against retrieved evidence.
+A portfolio-grade clinical information retrieval demo by **Rishabh Shukla**.
+
+**Live demo:** https://secure-clinical-ehr-validator.onrender.com
+
+**Verified:** 9/9 deterministic retrieval-and-safety evaluation cases pass in the project test suite. It demonstrates how an AI application can retrieve evidence from a selected synthetic patient record while enforcing patient scope, blocking diagnosis/treatment requests, redacting identifiers before optional external LLM calls, and validating generated answers against retrieved evidence.
 
 > **Safety boundary:** This repository uses synthetic records only. It is not a medical device, not HIPAA-certified, and must not be used for diagnosis, treatment, or real patient care.
 
