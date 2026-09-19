@@ -1,0 +1,71 @@
+# Personal remote OpenJarvis profile.
+# The public port is the gateway; OpenJarvis itself stays loopback-only.
+
+[engine]
+default = "litellm"
+
+[intelligence]
+default_model = "mistral/mistral-small-latest"
+preferred_engine = "litellm"
+provider = "cloud"
+temperature = 0.3
+max_tokens = 1024
+
+[agent]
+default_agent = "simple"
+max_turns = 4
+tools = ""
+context_from_memory = false
+
+[server]
+host = "127.0.0.1"
+port = 8001
+agent = "simple"
+model = "mistral/mistral-small-latest"
+workers = 1
+
+[security]
+enabled = true
+scan_input = true
+scan_output = true
+mode = "block"
+secret_scanner = true
+pii_scanner = true
+enforce_tool_confirmation = true
+ssrf_protection = true
+rate_limit_enabled = true
+rate_limit_rpm = 30
+rate_limit_burst = 5
+local_engine_bypass = false
+local_tool_bypass = false
+
+[security.capabilities]
+enabled = true
+default_deny = true
+
+[tools]
+enabled = ""
+
+[tools.mcp]
+enabled = false
+
+[agent_manager]
+enabled = false
+
+[channel]
+enabled = false
+
+[analytics]
+enabled = false
+
+[telemetry]
+enabled = false
+
+[traces]
+enabled = false
+
+[skills]
+enabled = false
+
+[proactive]
+enabled = false
