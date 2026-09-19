@@ -40,7 +40,7 @@ local_engine_bypass = false
 local_tool_bypass = false
 
 [security.capabilities]
-enabled = true
+enabled = false
 default_deny = true
 
 [tools]
