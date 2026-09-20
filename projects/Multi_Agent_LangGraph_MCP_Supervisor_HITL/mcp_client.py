@@ -7,7 +7,7 @@ from typing import Any
 import certifi
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from mistralai.client import Mistral
+from mistralai import Mistral
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
 
