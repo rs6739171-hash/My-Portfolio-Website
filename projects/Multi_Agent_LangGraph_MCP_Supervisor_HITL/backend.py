@@ -33,6 +33,9 @@ from mcp_client import (
     forecast_mcp_search,
     weather_mcp_search,
 )
+from tools.flight_tool import search_flights
+from tools.tavily_tool import tavily_search
+from tools.weather_tool import get_weather_bundle
 
 
 def get_database_url():
@@ -173,6 +176,7 @@ class TravelState(TypedDict, total=False):
     approved: bool
     human_feedback: str
     final_response: str
+    integration_trace: Annotated[list[dict[str, str]], operator.add]
 
     llm_calls: int
 
@@ -404,35 +408,48 @@ Return concise travel guidance.
 
 
 def flight_agent(state: TravelState):
-    print("\nINSIDE FLIGHT AGENT\n")
     query = state["user_query"]
+    source = "mcp:aviationstack"
 
     try:
         airports = asyncio.run(aviation_mcp_call("list_airports"))
         airlines = asyncio.run(aviation_mcp_call("list_airlines"))
-
-        print("\nAIRPORTS:", airports)
-        print("\nAIRLINES:", airlines)
-
         prompt = FLIGHT_AGENT_PROMPT.format(
             query=query,
             airport_data=str(airports)[:3000],
             airline_data=str(airlines)[:3000],
         )
-
         response = llm.invoke(
             [
                 SystemMessage(content="You are an expert travel flight planner."),
                 HumanMessage(content=prompt),
             ]
         )
-        flight_data = response.content
-    except Exception as exc:
-        flight_data = f"Flight information unavailable: {exc}"
+        flight_data = str(response.content)
+    except Exception as mcp_exc:
+        print(f"FLIGHT MCP FALLBACK: {type(mcp_exc).__name__}: {mcp_exc}", flush=True)
+        try:
+            flight_data = search_flights(query)
+            if "API_KEY is missing" in flight_data or "Flight API error" in flight_data:
+                raise RuntimeError(flight_data)
+            source = "direct:aviationstack"
+        except Exception as direct_exc:
+            print(
+                f"FLIGHT DIRECT FALLBACK: {type(direct_exc).__name__}: {direct_exc}",
+                flush=True,
+            )
+            source = "fallback:guidance"
+            flight_data = (
+                "Live flight data is not configured for this deployment. "
+                "Use the likely major airports for the requested route, compare nonstop "
+                "and one-stop options, and verify current schedules and fares before booking. "
+                "AviationStack is used for status/schedule context and may not provide ticket prices."
+            )
 
     return {
         "flight_results": flight_data,
-        "messages": [AIMessage(content="Flight recommendations generated")],
+        "messages": [AIMessage(content="Flight specialist completed.")],
+        "integration_trace": [{"agent": "flight_agent", "source": source}],
         "llm_calls": state.get("llm_calls", 0) + 1,
     }
 
@@ -441,40 +458,33 @@ def flight_agent(state: TravelState):
 # Hotel Agent - original behavior kept
 # =========================
 def hotel_agent(state: TravelState):
-    query = (
-        f"Best hotels for "
-        f"{state['user_query']}"
-    )
+    query = f"Best hotels, neighborhoods, and accommodation options for {state['user_query']}"
+    source = "mcp:tavily"
 
     try:
-        hotel_results = asyncio.run(
-            tavily_mcp_search(query)
-        )
-
-    except Exception as exc:
-        print(
-            f"HOTEL AGENT MCP ERROR: "
-            f"{type(exc).__name__}: {exc}",
-            flush=True,
-        )
-
-        hotel_results = (
-            "Live hotel search is temporarily unavailable. "
-            "Provide general accommodation and neighborhood "
-            "guidance based on the destination and clearly "
-            "label it as non-live advice."
-        )
+        hotel_results = asyncio.run(tavily_mcp_search(query))
+    except Exception as mcp_exc:
+        print(f"HOTEL MCP FALLBACK: {type(mcp_exc).__name__}: {mcp_exc}", flush=True)
+        try:
+            hotel_results = tavily_search(query)
+            source = "direct:tavily"
+        except Exception as direct_exc:
+            print(
+                f"HOTEL DIRECT FALLBACK: {type(direct_exc).__name__}: {direct_exc}",
+                flush=True,
+            )
+            source = "fallback:guidance"
+            hotel_results = (
+                "Live hotel search is not configured. Prefer a well-reviewed property "
+                "near the main activity area or a transit hub, compare cancellation terms, "
+                "and verify taxes and resort fees before booking."
+            )
 
     return {
-        "hotel_results": hotel_results,
-        "messages": [
-            AIMessage(
-                content="Hotel information processed."
-            )
-        ],
-        "llm_calls": (
-            state.get("llm_calls", 0) + 1
-        ),
+        "hotel_results": str(hotel_results),
+        "messages": [AIMessage(content="Hotel specialist completed.")],
+        "integration_trace": [{"agent": "hotel_agent", "source": source}],
+        "llm_calls": state.get("llm_calls", 0) + 1,
     }
 
 
@@ -482,48 +492,36 @@ def hotel_agent(state: TravelState):
 # Weather Agent - original behavior kept
 # =========================
 def weather_agent(state: TravelState):
-    city = extract_destination(
-        state["user_query"]
-    )
+    city = extract_destination(state["user_query"])
+    source = "mcp:openweather"
 
     try:
-        weather_data = asyncio.run(
-            weather_mcp_search(city)
-        )
-
-        forecast_data = asyncio.run(
-            forecast_mcp_search(city)
-        )
-
-        weather_results = f"""
-Current Weather:
-{weather_data}
-
-Forecast:
-{forecast_data}
-"""
-
-    except Exception as exc:
-        print(
-            f"WEATHER AGENT MCP ERROR: "
-            f"{type(exc).__name__}: {exc}",
-            flush=True,
-        )
-
+        weather_data = asyncio.run(weather_mcp_search(city))
+        forecast_data = asyncio.run(forecast_mcp_search(city))
         weather_results = (
-            f"Live weather information for {city} "
-            "is temporarily unavailable. Give general "
-            "seasonal guidance and advise the traveler "
-            "to verify the forecast before departure."
+            f"Current Weather:\n{weather_data}\n\n"
+            f"Forecast:\n{forecast_data}"
         )
+    except Exception as mcp_exc:
+        print(f"WEATHER MCP FALLBACK: {type(mcp_exc).__name__}: {mcp_exc}", flush=True)
+        try:
+            weather_results = get_weather_bundle(city)
+            source = "direct:openweather"
+        except Exception as direct_exc:
+            print(
+                f"WEATHER DIRECT FALLBACK: {type(direct_exc).__name__}: {direct_exc}",
+                flush=True,
+            )
+            source = "fallback:guidance"
+            weather_results = (
+                f"Live weather for {city} is not configured. Check a current forecast "
+                "before departure and keep the itinerary flexible for heat, rain, or wind."
+            )
 
     return {
         "weather_results": weather_results,
-        "messages": [
-            AIMessage(
-                content="Weather information processed."
-            )
-        ],
+        "messages": [AIMessage(content="Weather specialist completed.")],
+        "integration_trace": [{"agent": "weather_agent", "source": source}],
     }
 
 
@@ -568,6 +566,7 @@ If exact live prices are unavailable, clearly label estimates as approximate.
     return {
         "budget_results": response.content,
         "messages": [AIMessage(content="Budget assessment generated.")],
+        "integration_trace": [{"agent": "budget_agent", "source": "model:analysis"}],
         "llm_calls": state.get("llm_calls", 0) + 1,
     }
 
@@ -617,6 +616,7 @@ Create a clear draft that is ready for human review.
         "itinerary": response.content,
         "approval_request": approval_request,
         "messages": [AIMessage(content="Draft itinerary created for human review.")],
+        "integration_trace": [{"agent": "itinerary_agent", "source": "model:planning"}],
         "llm_calls": state.get("llm_calls", 0) + 1,
     }
 
@@ -807,6 +807,7 @@ graph.add_edge("guardrail_blocked", END)
 # =========================
 DATABASE_URL = os.getenv("DATABASE_URL")
 _conn = None
+PERSISTENCE_MODE = "memory"
 
 if DATABASE_URL:
     try:
@@ -821,6 +822,7 @@ if DATABASE_URL:
         )
         checkpointer = PostgresSaver(_conn)
         checkpointer.setup()
+        PERSISTENCE_MODE = "postgres"
     except Exception as exc:
         print(f"PostgreSQL unavailable; using MemorySaver: {exc}")
         checkpointer = MemorySaver()
@@ -882,6 +884,9 @@ def _serialize_result(
         "guardrail_reason": result.get("guardrail_reason", ""),
         "approved": result.get("approved"),
         "human_feedback": result.get("human_feedback", ""),
+        "integration_trace": result.get("integration_trace", []),
+        "demo_mode": DEMO_MODE,
+        "persistence_mode": PERSISTENCE_MODE,
         "llm_calls": result.get("llm_calls", 0),
     }
 
@@ -911,6 +916,7 @@ def run_travel_agent(user_input: str, thread_id: str | None = None):
             "approved": False,
             "human_feedback": "",
             "final_response": "",
+            "integration_trace": [],
             "llm_calls": 0,
         },
         config=config,
@@ -940,3 +946,31 @@ def resume_travel_agent(
     )
 
     return _serialize_result(result, thread_id)
+
+
+def system_capabilities() -> dict[str, Any]:
+    """Return safe, non-secret deployment capability metadata for the UI."""
+    aviation_key = bool(
+        os.getenv("AVIATION_STACK_API_KEY") or os.getenv("AVIATIONSTACK_API_KEY")
+    )
+    return {
+        "app": "TripMate AI",
+        "version": "3.0.0",
+        "demo_mode": DEMO_MODE,
+        "llm": "Groq llama-3.3-70b-versatile" if GROQ_API_KEY else "Deterministic demo engine",
+        "persistence": PERSISTENCE_MODE,
+        "integrations": {
+            "tavily": bool(os.getenv("TAVILY_API_KEY")),
+            "aviationstack": aviation_key,
+            "openweather": bool(os.getenv("OPENWEATHER_API_KEY")),
+            "mcp": True,
+        },
+        "features": [
+            "input_guardrail",
+            "supervisor_routing",
+            "multi_agent_specialists",
+            "mcp_first_with_direct_fallbacks",
+            "human_in_the_loop",
+            "fastapi",
+        ],
+    }
