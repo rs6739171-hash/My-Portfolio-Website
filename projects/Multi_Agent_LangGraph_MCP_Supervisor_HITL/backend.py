@@ -173,17 +173,25 @@ class _MistralLLM:
             for message in messages
         ]
 
-        response = self.client.chat.complete(
-            model=self.model,
-            messages=payload,
-        )
-        content = response.choices[0].message.content
-        if isinstance(content, list):
-            content = "".join(
-                str(getattr(chunk, "text", chunk))
-                for chunk in content
+        try:
+            response = self.client.chat.complete(
+                model=self.model,
+                messages=payload,
             )
-        return AIMessage(content=str(content or ""))
+            content = response.choices[0].message.content
+            if isinstance(content, list):
+                content = "".join(
+                    str(getattr(chunk, "text", chunk))
+                    for chunk in content
+                )
+            return AIMessage(content=str(content or ""))
+        except Exception as exc:
+            print(
+                f"Mistral unavailable; deterministic fallback used: "
+                f"{type(exc).__name__}",
+                flush=True,
+            )
+            return _DemoLLM().invoke(messages)
 
 
 llm = (
@@ -1012,6 +1020,7 @@ def system_capabilities() -> dict[str, Any]:
                 else "Deterministic demo engine"
             )
         ),
+        "llm_fallback": "Deterministic fallback enabled",
         "persistence": PERSISTENCE_MODE,
         "integrations": {
             "tavily": bool(os.getenv("TAVILY_API_KEY")),
