@@ -2,135 +2,174 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TripMate AI</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>TripMate AI — Multi-Agent Travel Planner</title>
+  <meta name="description" content="TripMate AI uses LangGraph, MCP, guardrails, specialist travel agents and human approval to build practical travel plans.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=3">
 </head>
 <body>
-  <div class="page-bg">
-    <div class="gradient-circle circle-1"></div>
-    <div class="gradient-circle circle-2"></div>
-    <div class="gradient-circle circle-3"></div>
-  </div>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+  <div class="grid-noise" aria-hidden="true"></div>
 
-  <main class="app-container">
-    <section class="hero-section">
-      <div class="badge">
-        ✈️ TripMate AI — LangGraph, MCP, Supervisor, Guardrails & HITL
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="TripMate AI home">
+      <span class="brand-mark">T</span>
+      <span><strong>TripMate</strong><small>AI travel intelligence</small></span>
+    </a>
+    <div class="topbar-tags" aria-label="Technology stack">
+      <span>LangGraph</span><span>MCP</span><span>FastAPI</span><span>HITL</span>
+    </div>
+    <button class="ghost-btn" id="newPlanBtn" type="button">New plan</button>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> MULTI-AGENT TRAVEL PLANNER</div>
+        <h1>One request.<br><em>A coordinated travel team.</em></h1>
+        <p class="hero-lead">TripMate routes your request through guardrails, a supervisor, specialist travel agents, live-tool integrations, and a human review step before the final itinerary is produced.</p>
+        <div class="hero-pills">
+          <span>Supervisor routing</span>
+          <span>MCP-first tools</span>
+          <span>Direct API fallback</span>
+          <span>Human approval</span>
+        </div>
       </div>
-      <h1>Plan Your Perfect Trip with AI</h1>
-      <p>
-        Search flights, discover hotels, check weather, assess your budget,
-        and review the AI-generated draft before the final itinerary is created.
-      </p>
+
+      <aside class="system-card" aria-label="System status">
+        <div class="system-card-head">
+          <div>
+            <span class="mini-label">SYSTEM STATUS</span>
+            <h2>Travel stack online</h2>
+          </div>
+          <span class="pulse"><i></i> live</span>
+        </div>
+        <div class="system-grid">
+          <div><span>LLM mode</span><strong id="modeBadge">Checking…</strong></div>
+          <div><span>Checkpoints</span><strong id="persistenceBadge">Checking…</strong></div>
+          <div><span>Tavily</span><strong id="tavilyStatus">Checking…</strong></div>
+          <div><span>Aviation</span><strong id="aviationStatus">Checking…</strong></div>
+          <div><span>Weather</span><strong id="weatherStatus">Checking…</strong></div>
+          <div><span>Control layer</span><strong>Guardrail + HITL</strong></div>
+        </div>
+      </aside>
     </section>
 
     <section class="planner-card">
-      <div class="card-header">
+      <div class="planner-head">
         <div>
-          <h2>Where do you want to go?</h2>
-          <p>
-            Example: Plan a complete 7 days Japan trip from Bangladesh under 2 lakhs.
-          </p>
+          <span class="mini-label">DESCRIBE THE TRIP</span>
+          <h2>Where should the agents take you?</h2>
+          <p>Include origin, destination, dates or duration, budget, and anything you care about.</p>
         </div>
-        <div class="status-pill">
-          <span class="status-dot"></span>
-          Online
-        </div>
+        <div class="shortcut">Ctrl + Enter</div>
       </div>
 
-      <div class="input-area">
-        <textarea
-          id="userInput"
-          placeholder="Plan a complete 7 days Japan trip including flights, hotels and sightseeing under 2 lakhs..."
-        ></textarea>
-        <button id="sendBtn" onclick="sendMessage()">
-          <span id="btnText">Generate Draft</span>
-          <span id="btnLoader" class="loader hidden"></span>
-        </button>
-      </div>
-
-      <div class="quick-prompts">
-        <button onclick="setPrompt('Plan a complete 7 days Japan trip from Bangladesh including flights, hotels and sightseeing under 2 lakhs.')">
-          Japan Trip
-        </button>
-        <button onclick="setPrompt('Plan a 5 days Dubai trip from Dhaka with flights, hotels and sightseeing.')">
-          Dubai Trip
-        </button>
-        <button onclick="setPrompt('Plan a 7 days Thailand trip from Bangladesh with budget hotels and sightseeing.')">
-          Thailand Trip
-        </button>
-        <button onclick="setPrompt('Give me all country flight info.')">
-          Global Flights
-        </button>
+      <div class="composer">
+        <textarea id="userInput" maxlength="4000" placeholder="Plan a 6-day Japan trip from Ahmedabad for two people under ₹2.2 lakh. Include flights, hotels near public transport, weather advice, vegetarian food options and a relaxed itinerary."></textarea>
+        <div class="composer-foot">
+          <div class="prompt-chips">
+            <button type="button" data-prompt="Plan a 6-day Japan trip from Ahmedabad for two people under ₹2.2 lakh, including flights, hotels, weather and sightseeing.">Japan · 6 days</button>
+            <button type="button" data-prompt="Plan a 5-day Dubai trip from Ahmedabad with mid-range hotels, desert safari, city attractions and a total budget of ₹1.5 lakh.">Dubai · mid-range</button>
+            <button type="button" data-prompt="Plan a relaxed 7-day Thailand trip from Ahmedabad focused on beaches, local food, weather and budget stays.">Thailand · relaxed</button>
+          </div>
+          <button class="primary-btn" id="sendBtn" type="button">
+            <span id="btnText">Build my travel plan</span>
+            <span class="spinner hidden" id="btnLoader" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
     </section>
 
-    <section id="workflowSection" class="workflow-section hidden">
-      <div class="workflow-header">
+    <section class="workflow-card hidden" id="workflowSection">
+      <div class="workflow-top">
         <div>
-          <span class="eyebrow">Supervisor Agent</span>
-          <h2>Execution Plan</h2>
+          <span class="mini-label">LANGGRAPH EXECUTION</span>
+          <h2>Agent workflow</h2>
         </div>
-        <span id="guardrailBadge" class="guardrail-badge">Guardrail passed</span>
+        <div class="guardrail-pill" id="guardrailBadge">Guardrail checking</div>
       </div>
-      <p id="supervisorReasoning" class="supervisor-reasoning"></p>
-      <div id="agentChips" class="agent-chips"></div>
+      <p class="reasoning" id="supervisorReasoning">The supervisor is deciding which specialists are required.</p>
+      <div class="agent-rail" id="agentRail" aria-label="Agent execution path"></div>
+      <div class="trace-wrap">
+        <span class="mini-label">INTEGRATION TRACE</span>
+        <div class="trace-list" id="integrationTrace"></div>
+      </div>
     </section>
 
-    <section id="resultSection" class="result-section hidden">
-      <div class="result-header">
+    <section class="evidence-grid hidden" id="evidenceSection" aria-label="Specialist results">
+      <article class="evidence-card">
+        <div class="evidence-icon">✈</div><div><span>Flight specialist</span><h3>Routes & schedule context</h3></div>
+        <button type="button" data-toggle="flightEvidence">View</button>
+        <div class="evidence-body hidden" id="flightEvidence"></div>
+      </article>
+      <article class="evidence-card">
+        <div class="evidence-icon">⌂</div><div><span>Hotel specialist</span><h3>Stay & neighborhood research</h3></div>
+        <button type="button" data-toggle="hotelEvidence">View</button>
+        <div class="evidence-body hidden" id="hotelEvidence"></div>
+      </article>
+      <article class="evidence-card">
+        <div class="evidence-icon">☀</div><div><span>Weather specialist</span><h3>Conditions & packing context</h3></div>
+        <button type="button" data-toggle="weatherEvidence">View</button>
+        <div class="evidence-body hidden" id="weatherEvidence"></div>
+      </article>
+      <article class="evidence-card">
+        <div class="evidence-icon">₹</div><div><span>Budget specialist</span><h3>Feasibility & cost pressure</h3></div>
+        <button type="button" data-toggle="budgetEvidence">View</button>
+        <div class="evidence-body hidden" id="budgetEvidence"></div>
+      </article>
+    </section>
+
+    <section class="approval-card hidden" id="approvalSection">
+      <div class="approval-badge">HUMAN IN THE LOOP</div>
+      <div class="approval-layout">
+        <div class="approval-copy">
+          <h2>Review the draft before TripMate finalizes it.</h2>
+          <p id="approvalRequest">Approve the itinerary or tell the planner exactly what to change.</p>
+        </div>
+        <div class="approval-control">
+          <textarea id="approvalFeedback" maxlength="2000" placeholder="Optional feedback, e.g. replace Day 3 with a quieter neighborhood and reduce hotel cost…"></textarea>
+          <div class="approval-actions">
+            <button class="secondary-btn" id="reviseBtn" type="button">Request revision</button>
+            <button class="approve-btn" id="approveBtn" type="button">Approve & finalize</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-card hidden" id="resultSection">
+      <div class="result-head">
         <div>
-          <h2 id="resultTitle">Your AI Travel Plan</h2>
-          <p id="threadInfo">Thread ID: -</p>
+          <span class="mini-label" id="resultKicker">TRIPMATE OUTPUT</span>
+          <h2 id="resultTitle">Your travel plan</h2>
+          <p id="threadInfo">Session ready</p>
         </div>
         <div class="result-actions">
-          <button class="copy-btn" onclick="copyResult()">Copy</button>
-          <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+          <button class="ghost-btn copy-btn" type="button">Copy</button>
+          <button class="primary-small download-btn" type="button">Download PDF</button>
         </div>
       </div>
-
-      <div id="pdfContent" class="pdf-content">
-        <h1 class="pdf-title">AI Travel Plan</h1>
-        <div id="resultBox" class="result-box"></div>
+      <div class="pdf-content" id="pdfContent">
+        <h1 class="pdf-title">TripMate AI Travel Plan</h1>
+        <div class="result-box" id="resultBox"></div>
       </div>
     </section>
 
-    <section id="approvalSection" class="approval-section hidden">
-      <div class="approval-icon">👤</div>
-      <div class="approval-content">
-        <span class="eyebrow">Human-in-the-Loop</span>
-        <h2>Review the draft itinerary</h2>
-        <p id="approvalRequest">
-          Approve the draft or provide feedback before the final plan is generated.
-        </p>
-
-        <textarea
-          id="approvalFeedback"
-          class="feedback-input"
-          placeholder="Add revision feedback, for example: reduce the hotel cost and add one free day..."
-        ></textarea>
-
-        <div class="approval-actions">
-          <button id="approveBtn" class="approve-btn" onclick="submitApproval(true)">
-            Approve & Generate Final
-          </button>
-          <button id="reviseBtn" class="revise-btn" onclick="submitApproval(false)">
-            Revise Using Feedback
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section id="errorBox" class="error-box hidden"></section>
+    <div class="error-box hidden" id="errorBox" role="alert"></div>
   </main>
 
   <footer>
-    Built with FastAPI, LangGraph, Groq, PostgreSQL, Tavily, AviationStack and MCP
+    <span>TripMate AI · LangGraph + MCP + FastAPI + Guardrails + HITL</span>
+    <span>Travel information is planning assistance, not a booking guarantee. Verify prices, schedules, visa rules and local conditions.</span>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="/static/script.js"></script>
+  <script src="/static/script.js?v=3"></script>
 </body>
 </html>
