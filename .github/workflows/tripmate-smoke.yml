@@ -1,0 +1,89 @@
+name: TripMate Public Smoke Test
+
+on:
+  push:
+    branches:
+      - multi-agent-langgraph-mcp
+    paths:
+      - "projects/Multi_Agent_LangGraph_MCP_Supervisor_HITL/**"
+      - ".github/workflows/tripmate-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Exercise public TripMate workflow
+        env:
+          TRIPMATE_URL: https://multi-agent-langgraph-hitl-rishabh.onrender.com
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import time
+          import urllib.request
+          import urllib.error
+
+          base = os.environ["TRIPMATE_URL"].rstrip("/")
+
+          def request(path, method="GET", payload=None, retries=6):
+              body = None if payload is None else json.dumps(payload).encode()
+              headers = {"Content-Type": "application/json"} if payload is not None else {}
+              last = None
+              for attempt in range(retries):
+                  try:
+                      req = urllib.request.Request(base + path, data=body, headers=headers, method=method)
+                      with urllib.request.urlopen(req, timeout=45) as response:
+                          return response.status, json.loads(response.read().decode())
+                  except Exception as exc:
+                      last = exc
+                      if attempt + 1 < retries:
+                          time.sleep(5)
+              raise last
+
+          status, health = request("/health")
+          assert status == 200 and health.get("status") == "ok", health
+
+          status, caps = request("/api/capabilities")
+          assert status == 200 and caps.get("success") is True, caps
+          assert caps.get("features"), caps
+
+          status, draft = request(
+              "/api/travel",
+              method="POST",
+              payload={
+                  "message": "Plan a relaxed 4-day Dubai trip from Ahmedabad under INR 120000 with hotels, weather and a practical itinerary."
+              },
+          )
+          assert status == 200 and draft.get("success") is True, draft
+          assert draft.get("thread_id"), draft
+          assert draft.get("requires_approval") is True, draft
+          assert draft.get("itinerary") or draft.get("answer"), draft
+
+          status, final = request(
+              "/api/travel/approve",
+              method="POST",
+              payload={
+                  "thread_id": draft["thread_id"],
+                  "approved": True,
+                  "feedback": "",
+              },
+          )
+          assert status == 200 and final.get("success") is True, final
+          assert final.get("requires_approval") is False, final
+          assert final.get("answer"), final
+
+          print("TripMate smoke test passed")
+          print(json.dumps({
+              "health": health,
+              "capabilities": {
+                  "version": caps.get("version"),
+                  "demo_mode": caps.get("demo_mode"),
+                  "persistence": caps.get("persistence"),
+                  "integrations": caps.get("integrations"),
+              },
+              "selected_agents": draft.get("selected_agents"),
+              "trace": draft.get("integration_trace"),
+          }, indent=2))
+          PY
