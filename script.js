@@ -51,12 +51,12 @@
       steps: ['A seeded generator creates synthetic credit applications and labels for a reproducible portfolio experiment.', 'Numeric features are standardized while categorical features are one-hot encoded using a fitted ColumnTransformer.', 'A balanced logistic regression model is trained and the review threshold is selected on the holdout split using F1.', 'FastAPI returns the estimated probability, risk tier, threshold comparison, and model metadata for a validated application.', 'SHAP contributions are aggregated to the original business fields. The UI can then compare a modified scenario against the baseline without claiming causality.']
     },
     supervisor: {
-      title: 'LangGraph MCP Multi-Agent System', kicker: '06 / SUPERVISOR + GUARDRAILS',
-      description: 'A deployed FastAPI multi-agent travel system combining LangGraph supervisor routing, input guardrails, MCP tool adapters, checkpointed state, and explicit human-in-the-loop approval.',
-      tags: ['LangGraph', 'MCP', 'FastAPI', 'Supervisor Agent', 'Guardrails', 'Human-in-the-loop'],
+            title: 'TripMate AI — Multi-Agent Travel Planner', kicker: '06 / MULTI-AGENT TRAVEL AI',
+      description: 'A production-style travel planner combining LangGraph supervisor routing, input guardrails, MCP-first tool calls, direct API fallbacks, checkpointed state, FastAPI, and explicit human review.',
+      tags: ['LangGraph', 'MCP', 'FastAPI', 'Supervisor Agent', 'Guardrails', 'HITL', 'PostgreSQL'],
       sourceUrl: 'https://github.com/rs6739171-hash/My-Portfolio-Website/tree/main/projects/Multi_Agent_LangGraph_MCP_Supervisor_HITL',
-      features: ['A supervisor selects Flight, Hotel, Weather, Budget, and Itinerary specialists for each request.', 'Input guardrails run before specialist execution and block clearly harmful requests.', 'MCP adapters support Tavily search, AviationStack, and a custom weather server when provider keys are configured.', 'LangGraph interrupt/resume implements human approval or revision before the final response; PostgreSQL checkpoints are supported with an in-memory deployment fallback.'],
-      workflow: ['Validate request', 'Supervisor routes specialists', 'Run MCP/tool agents', 'Create itinerary draft', 'Human approve or revise', 'Finalize response'],
+      features: ['A supervisor dynamically selects Flight, Hotel, Weather, Budget, and Itinerary specialists for each request.', 'MCP-first integrations use Tavily, AviationStack, and a custom weather server, with direct API fallbacks when MCP is unavailable.', 'Input guardrails run before specialist execution, while the FastAPI layer exposes safe capability metadata and keeps provider secrets server-side.', 'LangGraph interrupt/resume implements explicit human approval or revision before finalization; PostgreSQL checkpoints are supported with an in-memory fallback.'],
+      workflow: ['Guardrail request', 'Supervisor routes specialists', 'MCP/direct tool research', 'Create itinerary draft', 'Human approve or revise', 'Finalize response'],
       steps: ['The request enters an input guardrail before any specialist workflow begins.', 'The supervisor selects the travel specialists needed for the request.', 'Selected agents gather or synthesize flight, hotel, weather, and budget context. Optional MCP providers enrich the workflow when keys are configured.', 'The itinerary agent creates a draft and LangGraph interrupts execution for human review.', 'The user approves the draft or provides revision feedback.', 'The graph resumes from the checkpoint and produces the final response. The public deployment includes a deterministic no-secret demo mode so the control flow remains testable.'],
       approval: 4
     }
@@ -205,7 +205,7 @@
     {label:'Travel Planner', hint:'Project', keywords:'trip mcp itinerary', project:'travel'},
     {label:'Secure Clinical EHR Validator', hint:'Project', keywords:'clinical healthcare safety guardrails retrieval grounding ehr', project:'clinical'},
     {label:'Explainable Credit Risk with SHAP', hint:'Project', keywords:'machine learning analytics shap explainability credit risk model', project:'credit'},
-    {label:'LangGraph MCP Multi-Agent System', hint:'Project', keywords:'supervisor guardrails mcp hitl agents fastapi', project:'supervisor'},
+    {label:'TripMate AI', hint:'Project', keywords:'travel supervisor guardrails mcp hitl agents fastapi tripmate', project:'supervisor'},
     {label:'View resume', hint:'PDF preview', keywords:'cv download education', dialog:'resume'},
     {label:'Contact Rishabh', hint:'Email & phone', keywords:'hire recruiter connect linkedin', dialog:'contact'},
     {label:'About & experience', hint:'Section', keywords:'education iit analyst', section:'about'},

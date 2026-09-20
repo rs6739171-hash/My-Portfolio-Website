@@ -303,6 +303,13 @@ async def forecast_mcp_search(city: str):
 
 def extract_destination(query: str) -> str:
     if llm is None:
+        try:
+            from tools.flight_tool import find_location_mentions
+            mentions = find_location_mentions(query)
+            if mentions:
+                return mentions[-1].title()
+        except Exception:
+            pass
         return "the requested destination"
 
     prompt = f"""
