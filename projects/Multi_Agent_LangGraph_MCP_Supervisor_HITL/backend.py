@@ -191,7 +191,11 @@ class _MistralLLM:
                 f"{type(exc).__name__}",
                 flush=True,
             )
-            return _DemoLLM().invoke(messages)
+            demo_response = _DemoLLM().invoke(messages)
+            return AIMessage(
+                content=demo_response.content,
+                additional_kwargs={"provider_fallback": True},
+            )
 
 
 llm = (
@@ -661,13 +665,17 @@ Create a clear draft that is ready for human review.
         ]
     )
 
+    itinerary_content = response.content
+    if isinstance(llm, _DemoLLM) or _response_used_provider_fallback(response):
+        itinerary_content = _compose_grounded_draft(state)
+
     approval_request = (
         "Please review the generated draft itinerary. Approve it to create the "
         "final polished plan, or provide feedback for revision."
     )
 
     return {
-        "itinerary": response.content,
+        "itinerary": itinerary_content,
         "approval_request": approval_request,
         "messages": [AIMessage(content="Draft itinerary created for human review.")],
         "integration_trace": [{"agent": "itinerary_agent", "source": "model:planning"}],
@@ -702,6 +710,94 @@ def human_approval_agent(state: TravelState):
         "human_feedback": human_feedback,
         "messages": [AIMessage(content="Human approval step completed.")],
     }
+
+
+# =========================
+# Grounded fallback composers
+# =========================
+def _text_block(value: Any, default: str) -> str:
+    text = str(value or "").strip()
+    return text if text else default
+
+
+def _response_used_provider_fallback(response: AIMessage) -> bool:
+    return bool(getattr(response, "additional_kwargs", {}).get("provider_fallback"))
+
+
+def _compose_grounded_draft(state: TravelState) -> str:
+    return f"""### Draft itinerary grounded in live specialist results
+
+**Original request**  
+{state.get('user_query', '')}
+
+### Flight context
+{_text_block(state.get('flight_results'), 'No flight result was returned.')}
+
+### Hotel context
+{_text_block(state.get('hotel_results'), 'No hotel result was returned.')}
+
+### Weather context
+{_text_block(state.get('weather_results'), 'No weather result was returned.')}
+
+### Budget context
+{_text_block(state.get('budget_results'), 'No separate budget analysis was returned.')}
+
+### Practical itinerary
+- **Arrival / Day 1:** Coordinate airport transfer with the live flight context above, check in, and keep the first activity block flexible.
+- **Middle days:** Prioritize the hotel-area and destination options returned above, while adjusting outdoor activities to the live forecast.
+- **Final day:** Leave sufficient airport-transfer buffer and re-check the flight status before departure.
+
+This draft deliberately preserves the specialist outputs instead of inventing replacement data when the LLM provider is temporarily unavailable."""
+
+
+def _compose_grounded_final(state: TravelState) -> str:
+    trace = state.get("integration_trace", [])
+    trace_lines = []
+    for item in trace:
+        if isinstance(item, dict):
+            agent = str(item.get("agent", "")).strip()
+            source = str(item.get("source", "")).strip()
+            if agent or source:
+                trace_lines.append(f"- {agent}: {source}")
+    trace_text = "\n".join(trace_lines) or "- No integration trace available."
+
+    itinerary = _text_block(
+        state.get("itinerary"),
+        "No itinerary text was returned; use the live specialist sections below as the planning basis.",
+    )
+
+    return f"""# TripMate AI Travel Plan
+
+## Trip Summary
+**Request:** {state.get('user_query', '')}
+
+This final plan is grounded directly in the specialist results collected during this session. The LLM provider was unavailable or rate-limited during final polishing, so TripMate preserved the live tool outputs rather than replacing them with generic text.
+
+## Flight Information
+{_text_block(state.get('flight_results'), 'No live flight result was returned. Verify the route and fare before booking.')}
+
+## Hotel Suggestions
+{_text_block(state.get('hotel_results'), 'No live hotel-search result was returned.')}
+
+## Weather Information
+{_text_block(state.get('weather_results'), 'No live weather result was returned.')}
+
+## Day-by-Day Itinerary
+{itinerary}
+
+## Estimated Budget
+{_text_block(state.get('budget_results'), 'No separate budget analysis was returned. Use the requested budget and live prices above as the spending ceiling.')}
+
+## Final Recommendations
+- Re-check flight status and final fare immediately before booking.
+- Confirm hotel cancellation terms, taxes, and location before payment.
+- Re-check the weather forecast shortly before departure.
+- Keep one flexible activity block for weather or transport changes.
+- Confirm current entry rules, insurance needs, and local requirements.
+
+### Integration Sources Used
+{trace_text}
+"""
 
 
 # =========================
@@ -771,8 +867,20 @@ Important:
         ]
     )
 
+    final_content = response.content
+    if (
+        isinstance(llm, _DemoLLM)
+        or _response_used_provider_fallback(response)
+        or not str(response.content or "").strip()
+    ):
+        final_content = _compose_grounded_final(state)
+        response = AIMessage(
+            content=final_content,
+            additional_kwargs={"grounded_fallback": True},
+        )
+
     return {
-        "final_response": response.content,
+        "final_response": final_content,
         "messages": [response],
         "llm_calls": state.get("llm_calls", 0) + 1,
     }
@@ -1009,7 +1117,7 @@ def system_capabilities() -> dict[str, Any]:
     )
     return {
         "app": "TripMate AI",
-        "version": "3.1.0",
+        "version": "3.2.0",
         "demo_mode": DEMO_MODE,
         "llm": (
             "Mistral mistral-small-latest"
