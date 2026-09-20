@@ -24,6 +24,7 @@ from langchain_core.messages import (
     SystemMessage,
 )
 from langchain_groq import ChatGroq
+from mistralai.client import Mistral
 
 
 from mcp_client import (
@@ -54,8 +55,9 @@ def get_database_url():
     return database_url
 
 
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-DEMO_MODE = not bool(GROQ_API_KEY)
+DEMO_MODE = not bool(MISTRAL_API_KEY or GROQ_API_KEY)
 
 # =========================
 # LLM - live Groq when configured, deterministic demo fallback otherwise
@@ -144,10 +146,54 @@ class _DemoLLM:
             "Demo mode is active. Configure GROQ_API_KEY to enable live model generation."
         ))
 
+class _MistralLLM:
+    """Minimal LangChain-compatible adapter around the official Mistral SDK."""
+
+    def __init__(self, api_key: str, model: str = "mistral-small-latest"):
+        self.client = Mistral(api_key=api_key)
+        self.model = model
+
+    @staticmethod
+    def _role(message: Any) -> str:
+        if isinstance(message, SystemMessage):
+            return "system"
+        if isinstance(message, HumanMessage):
+            return "user"
+        return "assistant"
+
+    def invoke(self, messages):
+        if not isinstance(messages, list):
+            messages = [HumanMessage(content=str(messages))]
+
+        payload = [
+            {
+                "role": self._role(message),
+                "content": str(getattr(message, "content", message)),
+            }
+            for message in messages
+        ]
+
+        response = self.client.chat.complete(
+            model=self.model,
+            messages=payload,
+        )
+        content = response.choices[0].message.content
+        if isinstance(content, list):
+            content = "".join(
+                str(getattr(chunk, "text", chunk))
+                for chunk in content
+            )
+        return AIMessage(content=str(content or ""))
+
+
 llm = (
-    ChatGroq(model="llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
-    if GROQ_API_KEY
-    else _DemoLLM()
+    _MistralLLM(MISTRAL_API_KEY)
+    if MISTRAL_API_KEY
+    else (
+        ChatGroq(model="llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
+        if GROQ_API_KEY
+        else _DemoLLM()
+    )
 )
 
 # =========================
@@ -955,9 +1001,9 @@ def system_capabilities() -> dict[str, Any]:
     )
     return {
         "app": "TripMate AI",
-        "version": "3.0.0",
+        "version": "3.1.0",
         "demo_mode": DEMO_MODE,
-        "llm": "Groq llama-3.3-70b-versatile" if GROQ_API_KEY else "Deterministic demo engine",
+        "llm": (\n            "Mistral mistral-small-latest"\n            if MISTRAL_API_KEY\n            else (\n                "Groq llama-3.3-70b-versatile"\n                if GROQ_API_KEY\n                else "Deterministic demo engine"\n            )\n        ),
         "persistence": PERSISTENCE_MODE,
         "integrations": {
             "tavily": bool(os.getenv("TAVILY_API_KEY")),
