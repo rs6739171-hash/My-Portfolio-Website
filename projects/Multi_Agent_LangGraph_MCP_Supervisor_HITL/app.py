@@ -19,7 +19,7 @@ app = FastAPI(
         "Multi-agent travel planner with LangGraph, MCP, supervisor routing, "
         "guardrails, direct API fallbacks, and human-in-the-loop review."
     ),
-    version="3.1.0",
+    version="3.2.0",
 )
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
