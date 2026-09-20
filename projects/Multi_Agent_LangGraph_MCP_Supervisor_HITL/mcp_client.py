@@ -7,6 +7,7 @@ from typing import Any
 import certifi
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
+from mistralai import Mistral
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
 
@@ -29,6 +30,7 @@ AVIATION_STACK_API_KEY = (
 )
 
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 WEATHER_SERVER_PATH = BASE_DIR / "custom_weather_mcp_server.py"
@@ -71,6 +73,12 @@ llm = (
         api_key=GROQ_API_KEY,
     )
     if GROQ_API_KEY
+    else None
+)
+
+mistral_client = (
+    Mistral(api_key=MISTRAL_API_KEY)
+    if MISTRAL_API_KEY
     else None
 )
 
@@ -302,17 +310,11 @@ async def forecast_mcp_search(city: str):
 # =========================================================
 
 def extract_destination(query: str) -> str:
-    if llm is None:
-        try:
-            from tools.flight_tool import find_location_mentions
-            mentions = find_location_mentions(query)
-            if mentions:
-                return mentions[-1].title()
-        except Exception:
-            pass
-        return "the requested destination"
+    """Extract a destination with Mistral first and local/Groq fallbacks."""
 
-    prompt = f"""
+    if mistral_client is not None:
+        try:
+            prompt = f"""
 Extract only the destination city or country from the travel request.
 
 Travel request:
@@ -321,16 +323,47 @@ Travel request:
 Return only the destination name.
 Do not add any explanation.
 """
+            response = mistral_client.chat.complete(
+                model="mistral-small-latest",
+                messages=[{"role": "user", "content": prompt}],
+            )
+            content = response.choices[0].message.content
+            destination = str(content or "").strip()
+            if destination:
+                return destination
+        except Exception as exc:
+            print(
+                f"Mistral destination extraction fallback: {type(exc).__name__}",
+                flush=True,
+            )
 
-    response = llm.invoke(prompt)
+    try:
+        from tools.flight_tool import find_location_mentions
+        mentions = find_location_mentions(query)
+        if mentions:
+            return mentions[-1].title()
+    except Exception:
+        pass
 
-    destination = str(
-        response.content
-    ).strip()
+    if llm is not None:
+        try:
+            prompt = f"""
+Extract only the destination city or country from the travel request.
 
-    if not destination:
-        raise ValueError(
-            "The destination could not be extracted."
-        )
+Travel request:
+{query}
 
-    return destination
+Return only the destination name.
+Do not add any explanation.
+"""
+            response = llm.invoke(prompt)
+            destination = str(response.content).strip()
+            if destination:
+                return destination
+        except Exception as exc:
+            print(
+                f"Secondary destination extraction fallback: {type(exc).__name__}",
+                flush=True,
+            )
+
+    return "the requested destination"
