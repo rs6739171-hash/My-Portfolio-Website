@@ -49,8 +49,7 @@
       features: ['A deterministic synthetic-data generator creates training data during the build; no borrower dataset or binary model is copied into the repository.', 'A scikit-learn preprocessing pipeline handles numeric scaling and categorical one-hot encoding before a balanced logistic-risk model.', 'SHAP LinearExplainer produces per-feature contributions that are aggregated back to business-facing input fields and labeled by direction.', 'The application exposes ROC-AUC, PR-AUC, precision, recall, F1, Brier score, selected threshold, and a what-if scenario endpoint.'],
       workflow: ['Generate & split synthetic data', 'Preprocess features', 'Train & select threshold', 'Score application', 'Explain with SHAP & compare scenarios'],
       steps: ['A seeded generator creates synthetic credit applications and labels for a reproducible portfolio experiment.', 'Numeric features are standardized while categorical features are one-hot encoded using a fitted ColumnTransformer.', 'A balanced logistic regression model is trained and the review threshold is selected on the holdout split using F1.', 'FastAPI returns the estimated probability, risk tier, threshold comparison, and model metadata for a validated application.', 'SHAP contributions are aggregated to the original business fields. The UI can then compare a modified scenario against the baseline without claiming causality.']
-    }
-,
+    },
     supervisor: {
       title: 'LangGraph MCP Multi-Agent System', kicker: '06 / SUPERVISOR + GUARDRAILS',
       description: 'A deployed FastAPI multi-agent travel system combining LangGraph supervisor routing, input guardrails, MCP tool adapters, checkpointed state, and explicit human-in-the-loop approval.',
@@ -60,7 +59,8 @@
       workflow: ['Validate request', 'Supervisor routes specialists', 'Run MCP/tool agents', 'Create itinerary draft', 'Human approve or revise', 'Finalize response'],
       steps: ['The request enters an input guardrail before any specialist workflow begins.', 'The supervisor selects the travel specialists needed for the request.', 'Selected agents gather or synthesize flight, hotel, weather, and budget context. Optional MCP providers enrich the workflow when keys are configured.', 'The itinerary agent creates a draft and LangGraph interrupts execution for human review.', 'The user approves the draft or provides revision feedback.', 'The graph resumes from the checkpoint and produces the final response. The public deployment includes a deterministic no-secret demo mode so the control flow remains testable.'],
       approval: 4
-    },  };
+    }
+  };
   const skills = {
     agents: {title: 'Agents that collaborate.', description: 'I use explicit graph state and specialist roles to make multi-agent workflows easier to follow and control.', examples: ['LangGraph coordinates the Fundamental Analyst, Technical Analyst, and Portfolio Manager in the Market Analyst.', 'The Travel Planner supervisor routes tasks to specialist agents and exposes a human review step.', 'MCP connects external research tools to the travel workflow.'], project: 'market'},
     retrieval: {title: 'Answers with context.', description: 'The retrieval pipeline connects a user question to relevant document passages before generating an answer.', examples: ['Gemini Embeddings represent queries and documents for semantic search.', 'Qdrant stores and retrieves vectors; FlashRank reranks the candidate passages.', 'Planner, Retriever, and Responder agents coordinate the RAG workflow.'], project: 'rag'},
