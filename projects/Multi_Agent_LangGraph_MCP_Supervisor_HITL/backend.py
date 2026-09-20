@@ -24,7 +24,7 @@ from langchain_core.messages import (
     SystemMessage,
 )
 from langchain_groq import ChatGroq
-from mistralai.client import Mistral
+from mistralai import Mistral
 
 
 from mcp_client import (
