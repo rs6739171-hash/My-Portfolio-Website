@@ -311,7 +311,42 @@ async def forecast_mcp_search(city: str):
 
 def extract_destination(query: str) -> str:
     if mistral_client is not None:
-        prompt = f"""
+        try:
+            prompt = f"""
+Extract only the destination city or country from the travel request.
+
+Travel request:
+{query}
+
+Return only the destination name.
+Do not add any explanation.
+"""
+            response = mistral_client.chat.complete(
+                model="mistral-small-latest",
+                messages=[{"role": "user", "content": prompt}],
+            )
+            content = response.choices[0].message.content
+            destination = str(content or "").strip()
+            if destination:
+                return destination
+        except Exception as exc:
+            print(
+                f"Mistral destination extraction fallback: {type(exc).__name__}",
+                flush=True,
+            )
+
+    try:
+        from tools.flight_tool import find_location_mentions
+        mentions = find_location_mentions(query)
+        if mentions:
+            return mentions[-1].title()
+    except Exception:
+        pass
+
+    if llm is None:
+        return "the requested destination"
+
+    prompt = f"""
 Extract only the destination city or country from the travel request.
 
 Travel request:
