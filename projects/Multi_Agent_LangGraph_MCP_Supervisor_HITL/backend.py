@@ -1003,7 +1003,15 @@ def system_capabilities() -> dict[str, Any]:
         "app": "TripMate AI",
         "version": "3.1.0",
         "demo_mode": DEMO_MODE,
-        "llm": (\n            "Mistral mistral-small-latest"\n            if MISTRAL_API_KEY\n            else (\n                "Groq llama-3.3-70b-versatile"\n                if GROQ_API_KEY\n                else "Deterministic demo engine"\n            )\n        ),
+        "llm": (
+            "Mistral mistral-small-latest"
+            if MISTRAL_API_KEY
+            else (
+                "Groq llama-3.3-70b-versatile"
+                if GROQ_API_KEY
+                else "Deterministic demo engine"
+            )
+        ),
         "persistence": PERSISTENCE_MODE,
         "integrations": {
             "tavily": bool(os.getenv("TAVILY_API_KEY")),
