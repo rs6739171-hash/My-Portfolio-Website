@@ -1,299 +1,384 @@
-let currentThreadId = localStorage.getItem("travel_thread_id") || null;
+let currentThreadId = localStorage.getItem("tripmate_thread_id") || null;
 let latestAnswerMarkdown = "";
 let waitingForApproval = false;
+let latestData = null;
 
-const AGENT_LABELS = {
-  flight_agent: "✈️ Flight Agent",
-  hotel_agent: "🏨 Hotel Agent",
-  weather_agent: "🌦️ Weather Agent",
-  budget_agent: "💰 Budget Agent",
-  itinerary_agent: "🗓️ Itinerary Agent"
-};
+const AGENTS = [
+  { key: "guardrail", label: "Guardrail", type: "control" },
+  { key: "supervisor", label: "Supervisor", type: "control" },
+  { key: "flight_agent", label: "Flight", type: "specialist" },
+  { key: "hotel_agent", label: "Hotel", type: "specialist" },
+  { key: "weather_agent", label: "Weather", type: "specialist" },
+  { key: "budget_agent", label: "Budget", type: "specialist" },
+  { key: "itinerary_agent", label: "Itinerary", type: "specialist" },
+  { key: "human_approval", label: "Human review", type: "control" },
+  { key: "final_agent", label: "Finalizer", type: "control" }
+];
 
-function setPrompt(text) {
-  document.getElementById("userInput").value = text;
+const $ = (id) => document.getElementById(id);
+
+function setHidden(id, hidden) {
+  $(id).classList.toggle("hidden", hidden);
 }
 
-function setLoading(isLoading, mode = "draft") {
-  const sendBtn = document.getElementById("sendBtn");
-  const btnText = document.getElementById("btnText");
-  const btnLoader = document.getElementById("btnLoader");
-  const approveBtn = document.getElementById("approveBtn");
-  const reviseBtn = document.getElementById("reviseBtn");
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-  sendBtn.disabled = isLoading;
-  approveBtn.disabled = isLoading;
-  reviseBtn.disabled = isLoading;
-
-  if (isLoading && mode === "draft") {
-    btnText.classList.add("hidden");
-    btnLoader.classList.remove("hidden");
-  } else {
-    btnText.classList.remove("hidden");
-    btnLoader.classList.add("hidden");
+function renderMarkdown(target, markdown) {
+  const text = markdown || "";
+  if (typeof marked === "undefined") {
+    target.textContent = text;
+    return;
   }
+  const html = marked.parse(text);
+  target.innerHTML = typeof DOMPurify !== "undefined"
+    ? DOMPurify.sanitize(html)
+    : html;
+}
+
+async function loadCapabilities() {
+  try {
+    const response = await fetch("/api/capabilities", { cache: "no-store" });
+    const data = await response.json();
+    if (!response.ok) throw new Error("capabilities unavailable");
+
+    $("modeBadge").textContent = data.demo_mode ? "Demo engine" : "Live Groq";
+    $("modeBadge").className = data.demo_mode ? "status-off" : "status-on";
+    $("persistenceBadge").textContent = data.persistence === "postgres" ? "PostgreSQL" : "In-memory";
+    $("persistenceBadge").className = data.persistence === "postgres" ? "status-on" : "status-off";
+
+    const status = (id, enabled) => {
+      $(id).textContent = enabled ? "Configured" : "Fallback ready";
+      $(id).className = enabled ? "status-on" : "status-off";
+    };
+    status("tavilyStatus", data.integrations?.tavily);
+    status("aviationStatus", data.integrations?.aviationstack);
+    status("weatherStatus", data.integrations?.openweather);
+  } catch (_) {
+    ["modeBadge", "persistenceBadge", "tavilyStatus", "aviationStatus", "weatherStatus"]
+      .forEach((id) => { $(id).textContent = "Available"; });
+  }
+}
+
+function setBusy(busy) {
+  $("sendBtn").disabled = busy || waitingForApproval;
+  $("approveBtn").disabled = busy;
+  $("reviseBtn").disabled = busy;
+  $("btnText").classList.toggle("hidden", busy);
+  $("btnLoader").classList.toggle("hidden", !busy);
 }
 
 function showError(message) {
-  const errorBox = document.getElementById("errorBox");
-  errorBox.textContent = message;
-  errorBox.classList.remove("hidden");
-  errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
+  $("errorBox").textContent = message;
+  setHidden("errorBox", false);
+  $("errorBox").scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function hideError() {
-  const errorBox = document.getElementById("errorBox");
-  errorBox.classList.add("hidden");
-  errorBox.textContent = "";
+  setHidden("errorBox", true);
+  $("errorBox").textContent = "";
 }
 
-function renderMarkdown(element, markdown) {
-  if (typeof marked !== "undefined") {
-    element.innerHTML = marked.parse(markdown || "");
-  } else {
-    element.innerText = markdown || "";
-  }
+function setPrompt(text) {
+  $("userInput").value = text;
+  $("userInput").focus();
 }
 
-function showWorkflow(data) {
-  const section = document.getElementById("workflowSection");
-  const reasoning = document.getElementById("supervisorReasoning");
-  const chips = document.getElementById("agentChips");
-  const guardrailBadge = document.getElementById("guardrailBadge");
+function renderAgentRail(data = null, loading = false) {
+  const selected = new Set(data?.selected_agents || []);
+  const requiresApproval = Boolean(data?.requires_approval);
+  const isFinal = data && !requiresApproval && data.guardrail_allowed !== false;
+  const blocked = data?.guardrail_allowed === false;
 
-  reasoning.textContent = data.supervisor_reasoning || "Supervisor routing completed.";
-  chips.innerHTML = "";
+  $("agentRail").innerHTML = AGENTS.map((agent) => {
+    let state = "pending";
+    let selectedNode = false;
 
-  (data.selected_agents || []).forEach((agent) => {
-    const chip = document.createElement("span");
-    chip.className = "agent-chip";
-    chip.textContent = AGENT_LABELS[agent] || agent;
-    chips.appendChild(chip);
-  });
+    if (loading) {
+      selectedNode = true;
+    } else if (data) {
+      if (agent.key === "guardrail" || agent.key === "supervisor") {
+        state = "done";
+        selectedNode = true;
+      } else if (agent.type === "specialist") {
+        selectedNode = selected.has(agent.key);
+        state = selectedNode ? "done" : "pending";
+      } else if (agent.key === "human_approval") {
+        selectedNode = !blocked;
+        state = requiresApproval ? "done" : (isFinal ? "done" : "pending");
+      } else if (agent.key === "final_agent") {
+        selectedNode = isFinal;
+        state = isFinal ? "done" : "pending";
+      }
+    }
 
+    const classes = ["agent-node", state];
+    if (selectedNode) classes.push("selected");
+
+    return `<div class="${classes.join(" ")}">
+      <span>${escapeHtml(agent.type)}</span>
+      <strong>${escapeHtml(agent.label)}</strong>
+    </div>`;
+  }).join("");
+}
+
+function renderWorkflow(data) {
+  latestData = data;
+  setHidden("workflowSection", false);
+
+  const guardrail = $("guardrailBadge");
   if (data.guardrail_allowed === false) {
-    guardrailBadge.textContent = "Guardrail blocked";
-    guardrailBadge.classList.add("blocked");
+    guardrail.textContent = "Guardrail blocked";
+    guardrail.classList.add("blocked");
   } else {
-    guardrailBadge.textContent = "Guardrail passed";
-    guardrailBadge.classList.remove("blocked");
+    guardrail.textContent = "Guardrail passed";
+    guardrail.classList.remove("blocked");
   }
 
-  section.classList.remove("hidden");
+  $("supervisorReasoning").textContent =
+    data.supervisor_reasoning || "Supervisor routing completed.";
+
+  renderAgentRail(data);
+
+  const trace = data.integration_trace || [];
+  $("integrationTrace").innerHTML = trace.length
+    ? trace.map((item) => `<span class="trace-item"><b>${escapeHtml(item.agent.replace("_agent", ""))}</b> · ${escapeHtml(item.source)}</span>`).join("")
+    : '<span class="trace-item">No external tool call was required.</span>';
 }
 
-function showResult(answer, threadId, isDraft = false) {
-  latestAnswerMarkdown = answer || "";
+function renderEvidence(data) {
+  if (data.guardrail_allowed === false) {
+    setHidden("evidenceSection", true);
+    return;
+  }
 
-  const resultSection = document.getElementById("resultSection");
-  const resultBox = document.getElementById("resultBox");
-  const threadInfo = document.getElementById("threadInfo");
-  const resultTitle = document.getElementById("resultTitle");
+  const values = {
+    flightEvidence: data.flight_results || "No flight specialist output.",
+    hotelEvidence: data.hotel_results || "No hotel specialist output.",
+    weatherEvidence: data.weather_results || "No weather specialist output.",
+    budgetEvidence: data.budget_results || "No budget specialist output."
+  };
 
-  renderMarkdown(resultBox, latestAnswerMarkdown);
-  threadInfo.textContent = `Thread ID: ${threadId}`;
-  resultTitle.textContent = isDraft ? "Draft Travel Plan" : "Your Final AI Travel Plan";
-  resultSection.classList.remove("hidden");
-
-  resultSection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+  Object.entries(values).forEach(([id, value]) => {
+    $(id).textContent = String(value);
   });
+  setHidden("evidenceSection", false);
+}
+
+function showResult(data, isDraft) {
+  latestAnswerMarkdown = data.answer || data.itinerary || "";
+  $("resultTitle").textContent = isDraft ? "Draft itinerary for your review" : "Your final TripMate plan";
+  $("resultKicker").textContent = isDraft ? "DRAFT · HUMAN REVIEW REQUIRED" : "FINAL · REVIEW COMPLETE";
+  $("threadInfo").textContent = `Session ${data.thread_id.slice(0, 18)}… · ${data.llm_calls || 0} model calls`;
+  renderMarkdown($("resultBox"), latestAnswerMarkdown);
+  setHidden("resultSection", false);
 }
 
 function showApproval(data) {
   waitingForApproval = true;
-  const section = document.getElementById("approvalSection");
-  const approvalRequest = document.getElementById("approvalRequest");
-  approvalRequest.textContent = data.approval_request ||
-    "Approve the draft or provide feedback before the final plan is generated.";
-  section.classList.remove("hidden");
+  $("approvalRequest").textContent = data.approval_request ||
+    "Review the draft, then approve it or request a revision.";
+  setHidden("approvalSection", false);
+  $("sendBtn").disabled = true;
 }
 
 function hideApproval() {
   waitingForApproval = false;
-  document.getElementById("approvalSection").classList.add("hidden");
-  document.getElementById("approvalFeedback").value = "";
+  setHidden("approvalSection", true);
+  $("approvalFeedback").value = "";
+  $("sendBtn").disabled = false;
 }
 
 async function sendMessage() {
   hideError();
 
   if (waitingForApproval) {
-    showError("Please approve or revise the current draft before starting another plan.");
+    showError("Review the current draft before starting another plan.");
     return;
   }
 
-  const input = document.getElementById("userInput");
-  const message = input.value.trim();
-
+  const message = $("userInput").value.trim();
   if (!message) {
-    showError("Please enter your travel request first.");
+    showError("Describe the trip you want TripMate to plan.");
     return;
   }
 
-  setLoading(true, "draft");
+  setHidden("workflowSection", false);
+  $("guardrailBadge").textContent = "Guardrail checking";
+  $("guardrailBadge").classList.remove("blocked");
+  $("supervisorReasoning").textContent = "The supervisor is assembling the specialist workflow…";
+  $("integrationTrace").innerHTML = '<span class="trace-item">Waiting for tool results…</span>';
+  renderAgentRail(null, true);
+  setBusy(true);
 
   try {
     const response = await fetch("/api/travel", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: message,
-        thread_id: currentThreadId
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, thread_id: currentThreadId })
     });
-
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.error || "Something went wrong.");
+      throw new Error(data.error || data.detail || "TripMate could not create the plan.");
     }
 
     currentThreadId = data.thread_id;
-    localStorage.setItem("travel_thread_id", currentThreadId);
+    localStorage.setItem("tripmate_thread_id", currentThreadId);
 
-    showWorkflow(data);
+    renderWorkflow(data);
+    renderEvidence(data);
 
     if (data.requires_approval) {
-      showResult(data.itinerary || data.answer, data.thread_id, true);
+      showResult(data, true);
       showApproval(data);
     } else {
       hideApproval();
-      showResult(data.answer, data.thread_id, false);
+      showResult(data, false);
     }
+
+    $("workflowSection").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
+    renderAgentRail();
     showError(error.message);
   } finally {
-    setLoading(false, "draft");
+    setBusy(false);
   }
 }
 
 async function submitApproval(approved) {
   hideError();
-
   if (!currentThreadId || !waitingForApproval) {
-    showError("There is no draft waiting for approval.");
+    showError("No draft is waiting for review.");
     return;
   }
 
-  const feedbackInput = document.getElementById("approvalFeedback");
-  const feedback = feedbackInput.value.trim();
-
+  const feedback = $("approvalFeedback").value.trim();
   if (!approved && !feedback) {
-    showError("Please enter revision feedback before requesting changes.");
-    feedbackInput.focus();
+    showError("Add revision feedback before requesting changes.");
+    $("approvalFeedback").focus();
     return;
   }
 
-  setLoading(true, "approval");
-
+  setBusy(true);
   try {
     const response = await fetch("/api/travel/approve", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         thread_id: currentThreadId,
-        approved: approved,
-        feedback: feedback
+        approved,
+        feedback
       })
     });
-
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.error || "Could not resume the travel workflow.");
+      throw new Error(data.error || data.detail || "TripMate could not resume the workflow.");
     }
 
-    showWorkflow(data);
     hideApproval();
-    showResult(data.answer, data.thread_id, false);
+    renderWorkflow(data);
+    renderEvidence(data);
+    showResult(data, false);
+    $("resultSection").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     showError(error.message);
   } finally {
-    setLoading(false, "approval");
+    setBusy(false);
   }
 }
 
-function copyResult() {
-  const resultBox = document.getElementById("resultBox");
-  const text = resultBox.innerText;
+function newPlan() {
+  currentThreadId = null;
+  latestAnswerMarkdown = "";
+  latestData = null;
+  waitingForApproval = false;
+  localStorage.removeItem("tripmate_thread_id");
+  $("userInput").value = "";
+  $("approvalFeedback").value = "";
+  ["workflowSection", "evidenceSection", "approvalSection", "resultSection", "errorBox"]
+    .forEach((id) => setHidden(id, true));
+  $("sendBtn").disabled = false;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(() => $("userInput").focus(), 350);
+}
 
-  if (!text) {
-    return;
+async function copyResult() {
+  const text = $("resultBox").innerText.trim();
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+    const button = document.querySelector(".copy-btn");
+    const original = button.textContent;
+    button.textContent = "Copied";
+    setTimeout(() => { button.textContent = original; }, 1400);
+  } catch (_) {
+    showError("Copy is unavailable in this browser.");
   }
-
-  navigator.clipboard.writeText(text)
-    .then(() => {
-      const copyBtn = document.querySelector(".copy-btn");
-      const oldText = copyBtn.textContent;
-      copyBtn.textContent = "Copied!";
-
-      setTimeout(() => {
-        copyBtn.textContent = oldText;
-      }, 1400);
-    })
-    .catch(() => {
-      showError("Could not copy result.");
-    });
 }
 
 function downloadPDF() {
-  const pdfContent = document.getElementById("pdfContent");
-
-  if (!latestAnswerMarkdown || !pdfContent) {
-    showError("No travel plan available to download.");
+  if (!latestAnswerMarkdown || typeof html2pdf === "undefined") {
+    showError("There is no travel plan ready to export.");
     return;
   }
 
-  const downloadBtn = document.querySelector(".download-btn");
-  const oldText = downloadBtn.textContent;
-  downloadBtn.textContent = "Preparing PDF...";
-  downloadBtn.disabled = true;
-
-  const options = {
-    margin: 0.5,
-    filename: "ai-travel-plan.pdf",
-    image: {
-      type: "jpeg",
-      quality: 0.98
-    },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff"
-    },
-    jsPDF: {
-      unit: "in",
-      format: "a4",
-      orientation: "portrait"
-    },
-    pagebreak: {
-      mode: ["avoid-all", "css", "legacy"]
-    }
-  };
+  const button = document.querySelector(".download-btn");
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = "Preparing…";
 
   html2pdf()
-    .set(options)
-    .from(pdfContent)
-    .save()
-    .then(() => {
-      downloadBtn.textContent = oldText;
-      downloadBtn.disabled = false;
+    .set({
+      margin: 0.45,
+      filename: "tripmate-ai-travel-plan.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      pagebreak: { mode: ["css", "legacy"] }
     })
-    .catch(() => {
-      downloadBtn.textContent = oldText;
-      downloadBtn.disabled = false;
-      showError("Could not download PDF.");
+    .from($("pdfContent"))
+    .save()
+    .catch(() => showError("PDF export failed. Try the browser print option instead."))
+    .finally(() => {
+      button.disabled = false;
+      button.textContent = original;
     });
 }
 
-document.addEventListener("keydown", function(event) {
-  if (event.ctrlKey && event.key === "Enter") {
+document.querySelectorAll("[data-prompt]").forEach((button) => {
+  button.addEventListener("click", () => setPrompt(button.dataset.prompt));
+});
+
+document.querySelectorAll("[data-toggle]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const target = $(button.dataset.toggle);
+    const opening = target.classList.contains("hidden");
+    target.classList.toggle("hidden");
+    button.textContent = opening ? "Hide" : "View";
+  });
+});
+
+$("sendBtn").addEventListener("click", sendMessage);
+$("approveBtn").addEventListener("click", () => submitApproval(true));
+$("reviseBtn").addEventListener("click", () => submitApproval(false));
+$("newPlanBtn").addEventListener("click", newPlan);
+document.querySelector(".copy-btn").addEventListener("click", copyResult);
+document.querySelector(".download-btn").addEventListener("click", downloadPDF);
+
+document.addEventListener("keydown", (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+    event.preventDefault();
     sendMessage();
   }
 });
+
+renderAgentRail();
+loadCapabilities();
