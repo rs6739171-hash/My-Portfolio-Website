@@ -1,7 +1,7 @@
 'use strict';
 (() => {
   // Existing hosted-demo destinations are retained from the previous portfolio.
-  const demoLinks = {"rag": "https://enterprise-rag-rishabh.onrender.com/?password=HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg#HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg", "market": "https://market-analyst-rishabh.onrender.com/?password=mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w#mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w", "travel": "https://travel-planner-rishabh.onrender.com/?password=gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU#gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU", "clinical": "https://secure-clinical-ehr-validator.onrender.com", "credit": "https://explainable-credit-risk-shap.onrender.com"};
+  const demoLinks = {"rag": "https://enterprise-rag-rishabh.onrender.com/?password=HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg#HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg", "market": "https://market-analyst-rishabh.onrender.com/?password=mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w#mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w", "travel": "https://travel-planner-rishabh.onrender.com/?password=gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU#gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU", "clinical": "https://secure-clinical-ehr-validator.onrender.com", "credit": "https://explainable-credit-risk-shap.onrender.com", "supervisor": "https://multi-agent-langgraph-hitl-rishabh.onrender.com"};
   const projects = {
     rag: {
       title: 'Enterprise Agentic RAG', kicker: '01 / KNOWLEDGE SYSTEMS',
@@ -49,6 +49,16 @@
       features: ['A deterministic synthetic-data generator creates training data during the build; no borrower dataset or binary model is copied into the repository.', 'A scikit-learn preprocessing pipeline handles numeric scaling and categorical one-hot encoding before a balanced logistic-risk model.', 'SHAP LinearExplainer produces per-feature contributions that are aggregated back to business-facing input fields and labeled by direction.', 'The application exposes ROC-AUC, PR-AUC, precision, recall, F1, Brier score, selected threshold, and a what-if scenario endpoint.'],
       workflow: ['Generate & split synthetic data', 'Preprocess features', 'Train & select threshold', 'Score application', 'Explain with SHAP & compare scenarios'],
       steps: ['A seeded generator creates synthetic credit applications and labels for a reproducible portfolio experiment.', 'Numeric features are standardized while categorical features are one-hot encoded using a fitted ColumnTransformer.', 'A balanced logistic regression model is trained and the review threshold is selected on the holdout split using F1.', 'FastAPI returns the estimated probability, risk tier, threshold comparison, and model metadata for a validated application.', 'SHAP contributions are aggregated to the original business fields. The UI can then compare a modified scenario against the baseline without claiming causality.']
+    },
+    supervisor: {
+      title: 'LangGraph MCP Multi-Agent System', kicker: '06 / SUPERVISOR + GUARDRAILS',
+      description: 'A deployed FastAPI multi-agent travel system combining LangGraph supervisor routing, input guardrails, MCP tool adapters, checkpointed state, and explicit human-in-the-loop approval.',
+      tags: ['LangGraph', 'MCP', 'FastAPI', 'Supervisor Agent', 'Guardrails', 'Human-in-the-loop'],
+      sourceUrl: 'https://github.com/rs6739171-hash/My-Portfolio-Website/tree/main/projects/Multi_Agent_LangGraph_MCP_Supervisor_HITL',
+      features: ['A supervisor selects Flight, Hotel, Weather, Budget, and Itinerary specialists for each request.', 'Input guardrails run before specialist execution and block clearly harmful requests.', 'MCP adapters support Tavily search, AviationStack, and a custom weather server when provider keys are configured.', 'LangGraph interrupt/resume implements human approval or revision before the final response; PostgreSQL checkpoints are supported with an in-memory deployment fallback.'],
+      workflow: ['Validate request', 'Supervisor routes specialists', 'Run MCP/tool agents', 'Create itinerary draft', 'Human approve or revise', 'Finalize response'],
+      steps: ['The request enters an input guardrail before any specialist workflow begins.', 'The supervisor selects the travel specialists needed for the request.', 'Selected agents gather or synthesize flight, hotel, weather, and budget context. Optional MCP providers enrich the workflow when keys are configured.', 'The itinerary agent creates a draft and LangGraph interrupts execution for human review.', 'The user approves the draft or provides revision feedback.', 'The graph resumes from the checkpoint and produces the final response. The public deployment includes a deterministic no-secret demo mode so the control flow remains testable.'],
+      approval: 4
     }
   };
   const skills = {
@@ -195,6 +205,7 @@
     {label:'Travel Planner', hint:'Project', keywords:'trip mcp itinerary', project:'travel'},
     {label:'Secure Clinical EHR Validator', hint:'Project', keywords:'clinical healthcare safety guardrails retrieval grounding ehr', project:'clinical'},
     {label:'Explainable Credit Risk with SHAP', hint:'Project', keywords:'machine learning analytics shap explainability credit risk model', project:'credit'},
+    {label:'LangGraph MCP Multi-Agent System', hint:'Project', keywords:'supervisor guardrails mcp hitl agents fastapi', project:'supervisor'},
     {label:'View resume', hint:'PDF preview', keywords:'cv download education', dialog:'resume'},
     {label:'Contact Rishabh', hint:'Email & phone', keywords:'hire recruiter connect linkedin', dialog:'contact'},
     {label:'About & experience', hint:'Section', keywords:'education iit analyst', section:'about'},
