@@ -77,8 +77,7 @@ The final UI includes:
 All provider credentials stay outside the repository.
 
 ```env
-GROQ_API_KEY=
-TAVILY_API_KEY=
+MISTRAL_API_KEY=\n# Optional fallback:\nGROQ_API_KEY=\nTAVILY_API_KEY=
 AVIATION_STACK_API_KEY=
 OPENWEATHER_API_KEY=
 DATABASE_URL=
@@ -91,7 +90,7 @@ DEFAULT_ORIGIN_IATA=AMD
 
 The app can start without provider secrets. In that state:
 
-- Groq uses a deterministic demo engine.
+- Mistral is the primary live LLM when `MISTRAL_API_KEY` is configured.\n- Groq remains an optional secondary provider; without either LLM key the app uses a deterministic demo engine.
 - MCP integrations fall back to direct integrations when corresponding keys are configured.
 - If no provider is configured, specialists return explicit non-live guidance rather than crashing.
 - PostgreSQL is used when `DATABASE_URL` exists; otherwise LangGraph uses in-memory checkpoints.
