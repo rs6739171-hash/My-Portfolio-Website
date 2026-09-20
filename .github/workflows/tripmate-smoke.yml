@@ -73,8 +73,27 @@ jobs:
           assert status == 200 and final.get("success") is True, final
           assert final.get("requires_approval") is False, final
           assert final.get("answer"), final
+          assert draft.get("flight_results"), draft
+          assert draft.get("hotel_results"), draft
+          assert draft.get("weather_results"), draft
 
-          print("TripMate smoke test passed")
+          answer_lower = final["answer"].lower()
+          forbidden_generic = [
+              "a practical travel plan has been prepared and reviewed",
+              "live flight data is optional in demo mode",
+              "choose a well-reviewed property near your main activity area",
+              "check the destination forecast shortly before departure and pack accordingly",
+          ]
+          for phrase in forbidden_generic:
+              assert phrase not in answer_lower, {
+                  "error": "generic fallback leaked into final answer",
+                  "phrase": phrase,
+                  "answer": final["answer"],
+              }
+
+          assert health.get("version") == "3.2.0", health
+
+          print("TripMate grounded-output smoke test passed")
           print(json.dumps({
               "health": health,
               "capabilities": {
