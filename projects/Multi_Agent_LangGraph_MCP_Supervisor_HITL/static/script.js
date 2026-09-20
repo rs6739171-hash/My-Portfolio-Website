@@ -48,7 +48,7 @@ async function loadCapabilities() {
     const data = await response.json();
     if (!response.ok) throw new Error("capabilities unavailable");
 
-    $("modeBadge").textContent = data.demo_mode ? "Demo engine" : "Live Groq";
+    $("modeBadge").textContent = data.demo_mode ? "Demo engine" : (data.llm || "Live model");
     $("modeBadge").className = data.demo_mode ? "status-off" : "status-on";
     $("persistenceBadge").textContent = data.persistence === "postgres" ? "PostgreSQL" : "In-memory";
     $("persistenceBadge").className = data.persistence === "postgres" ? "status-on" : "status-off";
