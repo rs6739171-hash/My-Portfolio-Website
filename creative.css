@@ -12,6 +12,7 @@
   --radius: 24px;
 }
 body { isolation: isolate; background: var(--bg); overflow-x: clip; }
+main { overflow: clip; }
 .wrap { width: min(1240px, calc(100% - 112px)); }
 .ambient-background { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict; }
 .aurora { position: absolute; border-radius: 50%; filter: blur(78px); will-change: transform; }
