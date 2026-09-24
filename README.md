@@ -20,7 +20,7 @@ Run `python -m http.server 4173` in this directory and open `http://localhost:41
 
 ## Content and interaction
 
-- Five project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
+- Six project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
 - Resume buttons open a preview or download `Rishabh_Shukla_Resume.pdf`. The legacy filename, `Rishabh Shukla Resume.pdf`, contains the same PDF so previously shared links keep working.
 - The resume preview image is a rendering of the PDF, not a separately authored document.
 - The contact dialog provides email, phone, and resume shortcuts. Copy actions report success only after the clipboard operation succeeds.
@@ -28,10 +28,12 @@ Run `python -m http.server 4173` in this directory and open `http://localhost:41
 - A dismissible recruiter shortcut appears after the visitor explores the page; dismissal is remembered for the tab session.
 - Animations honor `prefers-reduced-motion`. Content remains visible if JavaScript or IntersectionObserver is unavailable.
 - The hero uses one existing portrait frame. The original frame archive is retained in the repository but is no longer preloaded by the website.
+- The blue and cyan visual theme includes CSS auroras, portrait orbits, a scrolling technology ribbon, and a lightweight canvas background. `creative.css` contains the theme and `motion.js` controls motion.
+- The navigation motion button pauses ambient animation and remembers the choice locally. Device reduced-motion preferences take precedence. Canvas work stops in hidden tabs, is capped at 30 fps, and uses fewer particles on mobile.
 
 ## Updating
 
-Edit page content in `index.html`, interaction data in `script.js`, and presentation in `style.css`. Replace both resume PDFs with identical bytes when updating, re-render `assets/resume-preview.jpg`, and update the version query on resume links.
+Edit page content in `index.html`, interaction data in `script.js`, base presentation in `style.css`, and the current visual theme in `creative.css`. Background animation lives in `motion.js`. Replace both resume PDFs with identical bytes when updating, re-render `assets/resume-preview.jpg`, and update the version query on resume links.
 
 GitHub's `main` branch is connected to the existing Vercel production project. Feature branches create preview deployments through that connection.
 

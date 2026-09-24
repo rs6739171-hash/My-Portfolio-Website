@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0c0f14">
+  <meta name="theme-color" content="#070b16">
   <title>Rishabh Shukla — AI & GenAI Engineer</title>
   <meta name="description" content="Rishabh Shukla's AI engineering portfolio. Explore agentic RAG, multi-agent systems, secure clinical retrieval, evaluation, safety workflows, and deployed AI applications.">
   <meta property="og:title" content="Rishabh Shukla — AI & GenAI Engineer">
@@ -17,10 +17,16 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="preload" href="frames/frame_000001.png" as="image">
   <link rel="stylesheet" href="style.css?v=20260919-credit">
+  <link rel="stylesheet" href="creative.css?v=20260924">
   <script src="script.js?v=20260919-credit" defer></script>
+  <script src="motion.js?v=20260924" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient-background" aria-hidden="true">
+    <div class="aurora aurora-blue"></div><div class="aurora aurora-violet"></div><div class="aurora aurora-cyan"></div>
+    <div class="ambient-grid"></div><canvas id="ambientCanvas"></canvas><div class="ambient-vignette"></div>
+  </div>
   <div class="scroll-progress" aria-hidden="true"></div>
   <header class="site-header">
     <nav class="nav wrap" aria-label="Main navigation">
@@ -29,6 +35,7 @@
         <a href="#projects">Work</a><a href="#about">About</a><a href="#skills">Stack</a><a href="#contact">Contact</a>
       </div>
       <div class="nav-actions">
+        <button class="motion-toggle" id="motionToggle" type="button" aria-label="Pause background animation" aria-pressed="false" hidden><svg class="icon motion-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="icon motion-play" aria-hidden="true"><use href="#i-play"/></svg><span id="motionLabel">Motion on</span></button>
         <button class="command-trigger" data-open="command" aria-label="Open quick navigation" title="Quick navigation (Ctrl or Command + K)"><svg class="icon" aria-hidden="true"><use href="#i-command"/></svg><kbd>K</kbd></button>
         <button class="button button-small nav-resume" data-open="resume">Resume <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
         <button class="icon-button menu-toggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open navigation"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
@@ -40,27 +47,30 @@
     <section class="hero wrap" id="hero" aria-labelledby="heroTitle">
       <div class="hero-copy">
         <div class="availability"><span aria-hidden="true"></span> Open to AI & GenAI opportunities</div>
-        <p class="eyebrow hero-intro">HELLO, I'M RISHABH SHUKLA</p>
-        <h1 id="heroTitle">Making AI<br>work in the<br><em>real world.</em></h1>
-        <p class="hero-description">I build and deploy AI systems across RAG, agentic workflows, explainable ML, evaluation, guardrails, APIs, and human-in-the-loop applications. Python at the core.</p>
+        <p class="eyebrow hero-intro">RISHABH SHUKLA <span>AI & GENAI ENGINEER</span></p>
+        <h1 id="heroTitle">Ideas into<br>intelligent<br><em>experiences.</em></h1>
+        <p class="hero-description">I turn AI ideas into applications people can use. From grounded RAG to collaborative agents — built with Python, evaluated with care, and deployed to the real world.</p>
         <div class="hero-actions"><a class="button" href="#projects">Explore my work <svg class="icon" aria-hidden="true"><use href="#i-arrow-down"/></svg></a><button class="text-button" data-open="resume">View resume <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></div>
-        <div class="hero-footnote"><span>Based in Ahmedabad, India</span><span class="footnote-separator" aria-hidden="true">/</span><span>IIT Madras · Class of 2026</span></div><div class="proof-row" aria-label="Quick proof"><span><strong>6</strong> deployed AI apps</span><span><strong>15</strong> RAG benchmark questions</span><span><strong>6</strong> safety cases</span><span><strong>8.5</strong> CGPA</span></div>
+        <div class="hero-footnote"><span>Ahmedabad, India</span><span class="footnote-separator" aria-hidden="true">/</span><span>IIT Madras · 2026</span></div>
       </div>
       <div class="portrait-composition">
         <div class="portrait-orbit" aria-hidden="true"></div>
+        <div class="portrait-orbit orbit-outer" aria-hidden="true"></div>
+        <div class="portrait-label"><span class="label-cross" aria-hidden="true">+</span> HUMAN CURIOSITY. APPLIED INTELLIGENCE.</div>
         <div class="portrait-card">
           <img class="portrait" src="frames/frame_000001.png" width="1920" height="1080" alt="Rishabh Shukla wearing a navy suit" fetchpriority="high">
           <div class="portrait-shade" aria-hidden="true"></div>
           <span class="photo-corner corner-tl" aria-hidden="true"></span><span class="photo-corner corner-br" aria-hidden="true"></span>
           <div class="portrait-topline"><span>THE PERSON BEHIND THE CODE</span><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></div>
-          <div class="portrait-caption"><span class="eyebrow">AI / GENAI ENGINEER</span><p>Engineer by training.<br><em>Builder by instinct.</em></p></div>
+          <div class="portrait-caption"><span class="eyebrow">ALWAYS CURIOUS. ALWAYS BUILDING.</span><p>Rishabh Shukla<span>AI & GenAI Engineer</span></p></div>
         </div>
-        <div class="portrait-note"><span class="note-icon"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><div><strong>Ideas → working systems</strong><span>LangGraph · RAG · Python</span></div></div>
-        <span class="portrait-index" aria-hidden="true">01 / INTRODUCTION</span>
+        <div class="portrait-note"><span class="note-icon"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><div><strong>Built to do more.</strong><span>LangGraph · RAG · Python</span></div></div>
+        <span class="portrait-index" aria-hidden="true"><span>RETRIEVE. REASON. BUILD.</span> PORTFOLIO / 2026</span>
       </div>
     </section>
 
-    <div class="focus-strip"><div class="wrap focus-inner"><span class="eyebrow">WHAT I WORK WITH</span><span>Agentic AI</span><span class="strip-star" aria-hidden="true">✳</span><span>Retrieval & RAG</span><span class="strip-star" aria-hidden="true">✳</span><span>Human-in-the-loop</span><span class="strip-star" aria-hidden="true">✳</span><span>Evaluation</span><span class="strip-star" aria-hidden="true">✳</span><span>Explainable ML</span></div></div>
+    <div class="proof-row wrap" aria-label="Portfolio at a glance"><span><strong>06<span> /</span></strong> deployed AI apps</span><span><strong>15<span> /</span></strong> RAG benchmark questions</span><span><strong>06<span> /</span></strong> safety cases</span><span><strong>8.5<span> / 10</span></strong> IIT Madras CGPA</span></div>
+    <div class="focus-strip"><div class="wrap focus-inner"><span class="eyebrow">MY FOCUS</span><div class="focus-window"><div class="focus-track"><div class="focus-group"><span>Agentic AI</span><span class="strip-star" aria-hidden="true">✳</span><span>Retrieval & RAG</span><span class="strip-star" aria-hidden="true">✳</span><span>Human-in-the-loop</span><span class="strip-star" aria-hidden="true">✳</span><span>Evaluation</span><span class="strip-star" aria-hidden="true">✳</span><span>Explainable ML</span><span class="strip-star" aria-hidden="true">✳</span></div></div></div></div></div>
 
     <section class="section wrap" id="projects" aria-labelledby="workTitle">
       <div class="section-heading reveal"><div><p class="eyebrow section-label"><span>01</span> SELECTED WORK</p><h2 id="workTitle">Less theory.<br><em>More building.</em></h2></div><div class="section-intro"><p>Six deployed AI systems spanning retrieval, multi-agent orchestration, explainable ML, evaluation, guardrails, APIs, persistence, grounding validation, and human review.</p><a class="text-link" href="https://github.com/rs6739171-hash" target="_blank" rel="noopener noreferrer">Explore GitHub <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></a></div></div>
@@ -154,6 +164,7 @@
   <dialog class="modal skill-modal" id="skillDialog" aria-labelledby="skillTitle"><div class="modal-header"><span class="eyebrow">TOOLS IN PRACTICE</span><button class="icon-button" data-close aria-label="Close skill details" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div><div class="modal-body"><h2 id="skillTitle"></h2><p class="modal-lead" id="skillDescription"></p><ul class="detail-list" id="skillExamples"></ul><button class="button" id="skillProjectButton">Explore related project <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></div></dialog>
 
   <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="0" height="0"><defs>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8Z"/></symbol>
     <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></symbol><symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 4v16m-6-6 6 6 6-6"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="m6 3 4 5-3 3c2 3 3 4 6 6l3-3 5 4c-1 4-4 4-7 3C8 19 5 16 3 10 2 7 2 4 6 3Z"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol><symbol id="i-command" viewBox="0 0 24 24"><path d="M8 8H5a3 3 0 1 1 3-3v14a3 3 0 1 1-3-3h14a3 3 0 1 1-3 3V5a3 3 0 1 1 3 3H8Z"/></symbol><symbol id="i-code" viewBox="0 0 24 24"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 4-5 8-8 9-3-1-8-5-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></symbol><symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 10 5-10 5L2 8l10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 3v17h17M8 15v-4m5 4V7m5 8V5"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M2 12h5l3-9 4 18 3-9h5"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol><symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 8-2 6-6 2 2-6 6-2Z"/></symbol><symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/></symbol><symbol id="i-graduation" viewBox="0 0 24 24"><path d="m2 8 10-5 10 5-10 5L2 8ZM6 10v6c3 4 9 4 12 0v-6m4-2v9"/></symbol><symbol id="i-nodes" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="6" rx="1"/><rect x="2" y="16" width="7" height="6" rx="1"/><rect x="15" y="16" width="7" height="6" rx="1"/><path d="M12 8v4H5v4m7-4h7v4"/></symbol><symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1-4-2-6-2m12 5v-4c0-1-.3-2-1-2 3-.3 6-1.5 6-6 0-1.5-.5-2.5-1.5-3.5.2-.8.3-2-.2-3.5 0 0-1.2-.4-3.8 1a13 13 0 0 0-7 0C5 2.6 3.8 3 3.8 3c-.5 1.5-.4 2.7-.2 3.5C2.5 7.5 2 8.5 2 10c0 4.5 3 5.7 6 6-.7.5-1 1.3-1 2v4" transform="translate(2 0) scale(.9 1)"/></symbol>
   </defs></svg>
 </body>
