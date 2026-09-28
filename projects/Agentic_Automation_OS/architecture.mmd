@@ -1,0 +1,16 @@
+flowchart LR
+    A[Event Trigger] --> B[Normalize Input]
+    B --> C{Planner / Router}
+    C -->|Support| D[Severity Classifier]
+    C -->|Lead| E[Qualification Scorer]
+    C -->|Content| F[Policy Inspector]
+    D --> G{Risk Gate}
+    E --> H[Revenue Route]
+    F --> G
+    G -->|High Risk| I[Human Approval]
+    G -->|Low Risk| J[Action Executor]
+    I --> J
+    H --> J
+    J --> K[Audit Trace]
+    K --> L[Run Result]
+    L --> M[Browser Run History]
