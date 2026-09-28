@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Agentic Automation OS — a free-tier workflow orchestration demo with routing, approval gates, retries, run history, and serverless execution.">
+  <title>Agentic Automation OS — Rishabh Shukla</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/">RS<span>/</span> AUTOMATION OS</a>
+    <div class="top-actions">
+      <span class="status"><i></i> FREE-TIER RUNTIME</span>
+      <a href="https://github.com/rs6739171-hash/My-Portfolio-Website/tree/main/projects/Agentic_Automation_OS" target="_blank" rel="noopener">SOURCE ↗</a>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">AGENTIC WORKFLOW ORCHESTRATION</p>
+      <h1>Automate the process.<br><em>Keep humans in control.</em></h1>
+      <p class="lede">A portfolio-grade automation control plane with event triggers, routing, policy gates, human approval, serverless execution, audit traces, and browser-persisted run history.</p>
+      <div class="hero-metrics">
+        <div><strong>03</strong><span>WORKFLOW TEMPLATES</span></div>
+        <div><strong>$0</strong><span>REQUIRED INFRA COST</span></div>
+        <div><strong>01</strong><span>SERVERLESS ENGINE</span></div>
+        <div><strong>100%</strong><span>AUDITABLE RUNS</span></div>
+      </div>
+    </section>
+
+    <section class="control-grid">
+      <aside class="panel workflow-panel">
+        <div class="panel-title"><span>01</span><h2>Workflow library</h2></div>
+        <button class="workflow-card active" data-workflow="support-triage">
+          <span class="icon">⚡</span>
+          <span><strong>Support Incident Triage</strong><small>Classify → route → approval → action</small></span>
+          <b>P1/P2/P3</b>
+        </button>
+        <button class="workflow-card" data-workflow="lead-ops">
+          <span class="icon">◎</span>
+          <span><strong>Lead Qualification Pipeline</strong><small>Normalize → score → route → CRM handoff</small></span>
+          <b>REVOPS</b>
+        </button>
+        <button class="workflow-card" data-workflow="content-ops">
+          <span class="icon">✦</span>
+          <span><strong>Content Operations</strong><small>Parse → policy → approval → publish package</small></span>
+          <b>OPS</b>
+        </button>
+        <div class="architecture-mini">
+          <p>EXECUTION MODEL</p>
+          <div class="mini-flow"><span>Trigger</span><i>→</i><span>Planner</span><i>→</i><span>Policy</span><i>→</i><span>Action</span></div>
+          <small>Deterministic free fallback. No paid API is required for the live demo.</small>
+        </div>
+      </aside>
+
+      <section class="panel runner-panel">
+        <div class="panel-title"><span>02</span><h2>Run automation</h2></div>
+        <div class="selected-workflow">
+          <div><span class="live-dot"></span><strong id="selectedTitle">Support Incident Triage</strong></div>
+          <p id="selectedDescription">Classify incoming support requests, route by severity, and stop risky actions at a human approval gate.</p>
+        </div>
+        <label for="workflowInput">INPUT EVENT</label>
+        <textarea id="workflowInput" rows="7">Production login is down for enterprise customers and this is urgent. Please escalate it now.</textarea>
+        <div class="sample-row">
+          <button class="sample" data-sample="Production login is down for enterprise customers and this is urgent. Please escalate it now.">P1 incident</button>
+          <button class="sample" data-sample="I was charged twice on my invoice and need help with a refund.">Billing issue</button>
+          <button class="sample" data-sample="I want a product demo for our 80-person operations team this week. Please share pricing.">Hot lead</button>
+        </div>
+        <button class="run-button" id="runButton"><span>RUN WORKFLOW</span><b>⌘ ENTER</b></button>
+        <div class="runtime-note"><span>SERVERLESS</span><span>NO DATABASE REQUIRED</span><span>LOCAL RUN HISTORY</span></div>
+      </section>
+
+      <section class="panel execution-panel">
+        <div class="panel-title"><span>03</span><h2>Execution trace</h2></div>
+        <div id="emptyState" class="empty-state">
+          <div class="pulse-ring">◎</div>
+          <strong>No run yet</strong>
+          <p>Execute a workflow to see routing, guardrails, approvals, and the final automation payload.</p>
+        </div>
+        <div id="resultState" class="result-state hidden">
+          <div class="run-summary">
+            <div><span id="runStatus" class="run-status">COMPLETED</span><strong id="runName">Run</strong></div>
+            <small id="runId"></small>
+          </div>
+          <p id="runSummaryText" class="summary-text"></p>
+          <div id="traceList" class="trace-list"></div>
+          <details class="payload"><summary>Final output payload</summary><pre id="payloadOutput"></pre></details>
+        </div>
+      </section>
+    </section>
+
+    <section class="system-section">
+      <div class="section-head"><p class="eyebrow">SYSTEM DESIGN</p><h2>Built like an automation platform,<br>not a one-off script.</h2></div>
+      <div class="architecture">
+        <div class="arch-node"><span>01</span><strong>Event Trigger</strong><small>HTTP / UI / future cron-webhook</small></div>
+        <div class="connector">→</div>
+        <div class="arch-node accent"><span>02</span><strong>Planner + Router</strong><small>Intent, scoring, dynamic branch</small></div>
+        <div class="connector">→</div>
+        <div class="arch-node"><span>03</span><strong>Policy Gate</strong><small>Risk rules + human approval</small></div>
+        <div class="connector">→</div>
+        <div class="arch-node accent"><span>04</span><strong>Action Executor</strong><small>Connector-ready task payloads</small></div>
+        <div class="connector">→</div>
+        <div class="arch-node"><span>05</span><strong>Audit Trail</strong><small>Run logs + final state</small></div>
+      </div>
+      <div class="design-grid">
+        <article><span>FREE ALTERNATIVE</span><h3>Vercel Functions</h3><p>Replaces paid workers for this portfolio workload. Each run executes on demand, then the browser keeps recent run history.</p></article>
+        <article><span>SAFETY PATTERN</span><h3>Human-in-the-loop</h3><p>High-risk branches stop before simulated external actions. This mirrors approval nodes used in production automation systems.</p></article>
+        <article><span>RELIABILITY PATTERN</span><h3>Deterministic fallback</h3><p>The live demo does not depend on an LLM key, so it remains usable when model quotas, credits, or provider APIs are unavailable.</p></article>
+        <article><span>EXTENSIBLE</span><h3>Connector-ready</h3><p>The action layer can later connect Gmail, Slack, GitHub, Notion, webhooks, queues, or a free hosted database without redesigning the flow.</p></article>
+      </div>
+    </section>
+
+    <section class="history-section">
+      <div class="section-head compact">
+        <div><p class="eyebrow">OBSERVABILITY</p><h2>Recent runs</h2></div>
+        <button id="clearHistory" class="ghost-button">CLEAR HISTORY</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </main>
+  <footer><span>AGENTIC AUTOMATION OS / 2026</span><a href="/">BACK TO PORTFOLIO ↑</a></footer>
+  <script src="./app.js"></script>
+</body>
+</html>
