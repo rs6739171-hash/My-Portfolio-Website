@@ -1,0 +1,28 @@
+name: Automation OS CI
+
+on:
+  push:
+    paths:
+      - "api/automation*.js"
+      - "projects/Agentic_Automation_OS/**"
+      - ".github/workflows/automation-os-ci.yml"
+  pull_request:
+    paths:
+      - "api/automation*.js"
+      - "projects/Agentic_Automation_OS/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax check serverless engine
+        run: node --check api/automation.js
+      - name: Syntax check client
+        run: node --check projects/Agentic_Automation_OS/app.js
+      - name: Smoke test automation handler
+        run: |
+          node -e "const h=require('./api/automation.js');const req={method:'POST',body:{workflow:'lead-ops',input:'Need an enterprise demo and pricing this week'}};const res={setHeader(){},status(c){this.code=c;return this},json(b){if(this.code!==200||!b.runId||!b.logs||b.logs.length<4)process.exit(1);console.log(b.runId,b.status);return b},end(){}};Promise.resolve(h(req,res)).catch(()=>process.exit(1));"
