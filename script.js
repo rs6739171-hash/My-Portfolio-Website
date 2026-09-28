@@ -2,7 +2,17 @@
 (() => {
   // Existing hosted-demo destinations are retained from the previous portfolio.
   const demoLinks = {"rag": "https://enterprise-rag-rishabh.onrender.com/?password=HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg#HeZ7xzyq-lznN5r4vpZpj-HfwhrYqh-UzIcMzI_6lbg", "market": "https://market-analyst-rishabh.onrender.com/?password=mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w#mSRmkjXOEDKriIO16inihuOCiBjHycKCzT_zBt9300w", "travel": "https://travel-planner-rishabh.onrender.com/?password=gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU#gpKaoEIKA_plNs9L5zj4-n8zqdY-IlIkDLs4u3ZcHEU", "clinical": "https://secure-clinical-ehr-validator.onrender.com", "credit": "https://explainable-credit-risk-shap.onrender.com", "supervisor": "https://multi-agent-langgraph-hitl-rishabh.onrender.com"};
+  demoLinks.kubescope = 'https://kubescope-rishabh.onrender.com';
   const projects = {
+    kubescope: {
+      title: 'KubeScope — AI DevOps Kubernetes Agent', kicker: '08 / AI & DEVOPS',
+      description: 'An implementation of Abhishek Veeramalla’s Kubernetes-agent design, with a FastAPI orchestrator, responsive dashboard, evidence-based rules, protected live collection, and optional OpenRouter assessment. The public demo uses synthetic evidence and no LLM.',
+      tags: ['FastAPI', 'Python', 'Kubernetes', 'OpenRouter', 'Read-only RBAC', 'Streaming HTTP'],
+      sourceUrl: 'https://github.com/rs6739171-hash/My-Portfolio-Website/tree/main/projects/AI_DevOps_Kubernetes_Agent',
+      features: ['Seven sample scenarios cover crashes, image pull failures, OOM termination, scheduling, service selectors, probes, and a healthy baseline.', 'Findings reference the collected evidence and provide read-only diagnostic commands, suggested fixes, and prevention steps. No fixes are executed.', 'Owner-authenticated live mode selects server kubeconfig contexts and allowed namespaces. AI review is optional and live data sharing requires explicit opt-in.', 'Streaming progress, browser demo history, authenticated SQLite live history, JSON export, automated checks, Docker, and free Render deployment configuration. Original Apache-licensed design attribution is preserved.'],
+      workflow: ['Choose sample or live context', 'Collect Kubernetes evidence', 'Correlate rule findings', 'Optional owner AI review', 'Inspect and export report'],
+      steps: ['Choose a synthetic incident in the public demo. A separately configured live instance can use a trusted server-side kubeconfig.', 'Collect pod state, bounded logs, events, deployment availability, and Service/EndpointSlice evidence.', 'Rules correlate the evidence and link findings back to the relevant fields. Incomplete collection produces warnings.', 'An owner can optionally request an OpenRouter assessment; the public deployment does not call an LLM.', 'Review the suggested next checks and export the report. Every infrastructure change remains an operator decision.']
+    },
     rag: {
       title: 'Enterprise Agentic RAG', kicker: '01 / KNOWLEDGE SYSTEMS',
       description: 'A deployed document question-answering system combining LangGraph routing, semantic retrieval, reranking, guardrails, and a dedicated evaluation application.',
@@ -199,6 +209,7 @@
 
   // Searchable keyboard navigation also works using ordinary Tab / Shift+Tab.
   const commands = [
+    {label:'KubeScope Kubernetes Agent', hint:'Project', keywords:'devops kubernetes sre pods troubleshooting python fastapi', project:'kubescope'},
     {label:'Selected projects', hint:'Section', keywords:'work portfolio projects', section:'projects'},
     {label:'Enterprise Agentic RAG', hint:'Project', keywords:'retrieval knowledge ragas qdrant', project:'rag'},
     {label:'Market Analyst', hint:'Project', keywords:'stocks langgraph research', project:'market'},

@@ -4,6 +4,8 @@ A working implementation of [Abhishek Veeramalla's AI-DevOps-Kubernetes-Agent de
 
 The upstream repository contains an architecture document and five implementation prompts, not a runnable application. This project implements the investigation workflow with a Python/FastAPI backend, a responsive dashboard, explicit evidence references, read-only `kubectl` collection, and optional OpenRouter analysis.
 
+**Live demo:** https://kubescope-rishabh.onrender.com
+
 ## Try it
 
 The public deployment runs **synthetic sample incidents with deterministic rules**. It does not connect to a real cluster, call an LLM, or execute repairs. Choose a scenario, run an investigation, inspect the evidence, and export the JSON report. Owner-only live and AI capabilities are implemented but require configuration.

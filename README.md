@@ -14,13 +14,15 @@ A dependency-free static site using HTML, CSS, and JavaScript. No build step is 
 
 The clinical project source lives at `projects/Secure_Clinical_EHR_Validator/`. The explainable-ML project lives at `projects/Explainable_Credit_Risk_SHAP/`. Both include project documentation, tests/evaluation, attribution and Render deployment configuration.
 
+- **KubeScope — AI DevOps Kubernetes Agent** — evidence-linked Kubernetes investigations, synthetic public scenarios, protected read-only live collection, and optional AI review. Live at https://kubescope-rishabh.onrender.com. Source: `projects/AI_DevOps_Kubernetes_Agent/`.
+
 ## Local preview
 
 Run `python -m http.server 4173` in this directory and open `http://localhost:4173`.
 
 ## Content and interaction
 
-- Six project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
+- Seven project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
 - Resume buttons open a preview or download `Rishabh_Shukla_Resume.pdf`. The legacy filename, `Rishabh Shukla Resume.pdf`, contains the same PDF so previously shared links keep working.
 - The resume preview image is a rendering of the PDF, not a separately authored document.
 - The contact dialog provides email, phone, and resume shortcuts. Copy actions report success only after the clipboard operation succeeds.

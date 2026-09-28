@@ -407,3 +407,10 @@ h2 { font-size: clamp(2.8rem, 4.6vw, 4.4rem); }
 .automation-portfolio-gate strong,.automation-portfolio-gate small{display:block}
 .automation-portfolio-gate strong{font-size:.83rem;margin-bottom:.22rem}
 .automation-portfolio-gate small{color:var(--muted,#8f9aa8);font-size:.67rem;line-height:1.45}
+
+/* KubeScope project preview: illustrative sample evidence. */
+.kubescope-visual{background:radial-gradient(ellipse at 70% 20%,#14504470,transparent 65%),#0a171c!important;color:#d2f0e7}
+.kubescope-visual .visual-header{color:#93c5b3}
+.kubescope-terminal{margin:24px auto 18px;max-width:340px;padding:16px 18px;border:1px solid #356556;border-radius:12px;background:#081616c9;font:11px/1.6 monospace}
+.kubescope-terminal>div{display:flex;align-items:center;gap:12px;padding:8px 0}.kubescope-terminal span{color:#659b8b}.kubescope-terminal strong{margin-left:auto;color:#6be6b8}
+.kubescope-result{display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 12px 0}.kubescope-result svg{color:#6be6b8}.kubescope-result strong{display:block;font-size:13px}.kubescope-result small{display:block;font-size:10px;color:#8bb1a6;margin-top:4px}
