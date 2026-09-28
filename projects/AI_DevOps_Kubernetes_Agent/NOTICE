@@ -1,0 +1,12 @@
+KubeScope — AI DevOps Kubernetes Agent
+Implementation and adaptation by Rishabh Shukla, 2026.
+
+Based on the architecture and build prompts in:
+https://github.com/iam-veeramalla/AI-DevOps-Kubernetes-Agent
+Original author: Abhishek Veeramalla.
+Upstream revision: 11242e8be27a87005197a0ac26e0debf69e6d4ad
+Upstream license: Apache License, Version 2.0 (see LICENSE).
+
+Modifications: new runnable FastAPI application, static dashboard, rule-based
+diagnosis, read-only cluster collector, optional OpenRouter assessment,
+authentication, report history, tests, and deployment configuration.

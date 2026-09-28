@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: kubescope-rishabh
+    runtime: python
+    plan: free
+    region: singapore
+    rootDir: projects/AI_DevOps_Kubernetes_Agent
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.12
+      - key: ALLOW_LIVE_LLM
+        value: "false"
