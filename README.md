@@ -22,16 +22,17 @@ Run `python -m http.server 4173` in this directory and open `http://localhost:41
 
 ## Content and interaction
 
-- Seven project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
+- Eight project cards open accessible native dialogs with project details, source links, hosted demos, and illustrative workflow walkthroughs.
 - Resume buttons open a preview or download `Rishabh_Shukla_Resume.pdf`. The legacy filename, `Rishabh Shukla Resume.pdf`, contains the same PDF so previously shared links keep working.
 - The resume preview image is a rendering of the PDF, not a separately authored document.
 - The contact dialog provides email, phone, and resume shortcuts. Copy actions report success only after the clipboard operation succeeds.
 - Ctrl/Cmd+K opens searchable quick navigation. Arrow keys, Enter, Escape, and ordinary Tab navigation work.
 - A dismissible recruiter shortcut appears after the visitor explores the page; dismissal is remembered for the tab session.
 - Animations honor `prefers-reduced-motion`. Content remains visible if JavaScript or IntersectionObserver is unavailable.
-- The hero uses one existing portrait frame. The original frame archive is retained in the repository but is no longer preloaded by the website.
-- The blue and cyan visual theme includes CSS auroras, portrait orbits, a scrolling technology ribbon, and a lightweight canvas background. `creative.css` contains the theme and `motion.js` controls motion.
-- The navigation motion button pauses ambient animation and remembers the choice locally. Device reduced-motion preferences take precedence. Canvas work stops in hidden tabs, is capped at 30 fps, and uses fewer particles on mobile.
+- The hero uses a 67 KB WebP portrait (converted from the original 1.13 MB PNG at the same dimensions). The original frame archive remains in the repository and is not loaded by the website.
+- The blue and cyan visual theme uses gradient auroras, portrait orbits and a scrolling technology ribbon. `creative.css` contains the theme and `motion.js` controls motion. No full-screen canvas, animated blur or continuous JavaScript render loop is used.
+- The navigation motion button pauses ambient animation and remembers the choice locally. Device reduced-motion preferences take precedence. Decorative animation also pauses during scrolling, off screen, in hidden tabs and behind dialogs.
+- Scroll progress and active navigation use cached section positions, refreshed after layout changes. Cards remain visible without scroll-triggered reveal animations, and the floating header uses a solid background without backdrop blur.
 
 ## Updating
 

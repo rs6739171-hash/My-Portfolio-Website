@@ -288,35 +288,57 @@
   document.addEventListener('keydown', event => {if(event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true'){setMenu(false);menu.focus();}});
   document.addEventListener('click', event => {if(!event.target.closest('.nav') && menu.getAttribute('aria-expanded') === 'true') setMenu(false);});
 
-  // No frame preloader: the page is usable immediately. Animate only when needed.
-  if ('IntersectionObserver' in window) {
-    if (!reducedMotion.matches) document.body.classList.add('motion-enabled');
-    const revealObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target);}});
-    },{threshold:.06,rootMargin:'0px 0px -24px 0px'});
-    document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
-  }
-  reducedMotion.addEventListener('change', () => {
-    if (reducedMotion.matches) document.body.classList.remove('motion-enabled');
-  });
+  // Content stays visible: scrolling no longer starts large card reveal effects.
   let framePending = false;
+  let geometryDirty = true;
+  let sectionPositions = [];
+  let viewportHeight = 0;
+  let maxScroll = 1;
+  let contactTop = Infinity;
+  let activeSection = null;
   const trackedSections = Array.from(document.querySelectorAll('main section[id]')).filter(section => ['projects','about','skills','contact'].includes(section.id));
   const pageLinks = Array.from(navLinks.querySelectorAll('a'));
+  const progressBar = $('.scroll-progress');
+  const contactSection = $('#contact');
+
+  function measurePage() {
+    const y = window.scrollY;
+    viewportHeight = window.innerHeight;
+    maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportHeight);
+    sectionPositions = trackedSections.map(section => ({id: section.id, top: section.getBoundingClientRect().top + y}));
+    contactTop = contactSection.getBoundingClientRect().top + y;
+    geometryDirty = false;
+  }
   function updateScroll() {
     framePending = false;
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const progress = Math.min(1, Math.max(0, window.scrollY / max));
-    $('.scroll-progress').style.transform = `scaleX(${progress})`;
+    // Read geometry only after a layout change, before any DOM writes.
+    if (geometryDirty) measurePage();
+    const y = window.scrollY;
+    const progress = Math.min(1, Math.max(0, y / maxScroll));
     let active = '';
-    for (const section of trackedSections) {if(section.getBoundingClientRect().top < window.innerHeight * .4) active = section.id;}
-    pageLinks.forEach(link => {if(link.hash === `#${active}`) link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});
-    const contactVisible = $('#contact').getBoundingClientRect().top < window.innerHeight;
-    if (contactVisible) nudge.hidden = true;
-    else if (!nudgeDismissed && !nudgeSeen && progress > .47 && !document.querySelector('dialog[open]')) {
+    for (const section of sectionPositions) {if(section.top < y + viewportHeight * .4) active = section.id;}
+    progressBar.style.transform = `scaleX(${progress})`;
+    if (active !== activeSection) {
+      pageLinks.forEach(link => {if(link.hash === `#${active}`) link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});
+      activeSection = active;
+    }
+    const contactVisible = contactTop < y + viewportHeight;
+    if (contactVisible && !nudge.hidden) nudge.hidden = true;
+    else if (!contactVisible && !nudgeDismissed && !nudgeSeen && progress > .47 && !document.body.classList.contains('modal-open')) {
       nudge.hidden = false;nudgeSeen = true;
     }
   }
-  window.addEventListener('scroll', () => {if(!framePending){framePending=true;requestAnimationFrame(updateScroll);}}, {passive:true});
-  window.addEventListener('resize', () => {if(window.innerWidth > 620) setMenu(false);updateScroll();}, {passive:true});
-  updateScroll();
+  function scheduleScrollUpdate() {
+    if (!framePending) {framePending = true;requestAnimationFrame(updateScroll);}
+  }
+  function refreshGeometry() {
+    geometryDirty = true;
+    scheduleScrollUpdate();
+  }
+  window.addEventListener('scroll', scheduleScrollUpdate, {passive:true});
+  window.addEventListener('resize', () => {if(window.innerWidth > 620) setMenu(false);refreshGeometry();}, {passive:true});
+  window.addEventListener('load', refreshGeometry, {once:true});
+  if ('ResizeObserver' in window) new ResizeObserver(refreshGeometry).observe(document.body);
+  if (document.fonts) document.fonts.ready.then(refreshGeometry);
+  scheduleScrollUpdate();
 })();
